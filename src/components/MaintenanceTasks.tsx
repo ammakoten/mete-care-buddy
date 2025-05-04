@@ -1,14 +1,15 @@
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { maintenanceTasks, trees } from '@/data/mockData';
 import { Calendar, AlertCircle, CheckCircle, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useToast } from "@/hooks/use-toast";
 
 const getTreeName = (treeId: string) => {
   const tree = trees.find(t => t.id === treeId);
-  return tree ? tree.name : "Unknown Tree";
+  return tree ? tree.name : "Pohon Tidak Diketahui";
 };
 
 const getTaskIcon = (taskType: string) => {
@@ -32,12 +33,35 @@ const getStatusIcon = (status: string) => {
 };
 
 const MaintenanceTasks = () => {
+  const { toast } = useToast();
+
+  const handleScheduleTask = () => {
+    toast({
+      title: "Jadwalkan Tugas",
+      description: "Fitur untuk menjadwalkan tugas baru akan segera hadir!",
+    });
+  };
+
+  const handleCompleteTask = (taskId: string) => {
+    toast({
+      title: "Tugas Selesai",
+      description: "Tugas berhasil ditandai sebagai selesai!",
+    });
+  };
+
+  const handleEditTask = (taskId: string) => {
+    toast({
+      title: "Edit Tugas",
+      description: `Mengedit tugas dengan ID: ${taskId}`,
+    });
+  };
+
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-cashew-800">Maintenance Tasks</h2>
-        <Button className="bg-cashew-600 hover:bg-cashew-700">
-          Schedule Task
+        <h2 className="text-2xl font-bold text-cashew-800">Tugas Pemeliharaan</h2>
+        <Button className="bg-cashew-600 hover:bg-cashew-700" onClick={handleScheduleTask}>
+          Jadwalkan Tugas
         </Button>
       </div>
       
@@ -68,24 +92,34 @@ const MaintenanceTasks = () => {
                           : "bg-red-100 text-red-800 hover:bg-red-200"
                     }
                   >
-                    {task.priority} priority
+                    {task.priority === "low" ? "Prioritas rendah" : task.priority === "medium" ? "Prioritas sedang" : "Prioritas tinggi"}
                   </Badge>
                   
                   <div className="flex items-center text-sm">
                     <Calendar className="h-3.5 w-3.5 mr-1 text-muted-foreground" />
-                    <span className="text-muted-foreground">Due: {new Date(task.dueDate).toLocaleDateString()}</span>
+                    <span className="text-muted-foreground">Tenggat: {new Date(task.dueDate).toLocaleDateString('id-ID')}</span>
                   </div>
                 </div>
               </div>
               
               <div className="mt-4 flex space-x-2">
                 {task.status !== 'completed' && (
-                  <Button variant="outline" size="sm" className="border-green-200 hover:bg-green-50 text-green-700">
-                    Mark Complete
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="border-green-200 hover:bg-green-50 text-green-700"
+                    onClick={() => handleCompleteTask(task.id)}
+                  >
+                    Tandai Selesai
                   </Button>
                 )}
-                <Button variant="outline" size="sm" className="border-cashew-200 hover:bg-cashew-50 text-cashew-700">
-                  Edit Task
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="border-cashew-200 hover:bg-cashew-50 text-cashew-700"
+                  onClick={() => handleEditTask(task.id)}
+                >
+                  Edit Tugas
                 </Button>
               </div>
             </CardContent>

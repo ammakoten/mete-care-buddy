@@ -23,34 +23,34 @@ const DashboardOverview = () => {
         <CardHeader className="pb-2">
           <CardTitle className="text-lg flex items-center">
             <TreeDeciduous className="h-5 w-5 mr-2 text-cashew-600" />
-            Tree Health
+            Kesehatan Pohon
           </CardTitle>
-          <CardDescription>Overall health status of your cashew trees</CardDescription>
+          <CardDescription>Status kesehatan pohon jambu mete Anda</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div className="space-y-1">
               <div className="flex justify-between text-sm">
-                <span>Healthy</span>
-                <span className="font-medium">{healthyTrees} trees</span>
+                <span>Sehat</span>
+                <span className="font-medium">{healthyTrees} pohon</span>
               </div>
-              <Progress value={(healthyTrees / totalTrees) * 100} className="h-2 bg-gray-100" indicatorColor="bg-green-500" />
+              <Progress value={(healthyTrees / totalTrees) * 100} className="h-2 bg-gray-100" />
             </div>
             
             <div className="space-y-1">
               <div className="flex justify-between text-sm">
-                <span>Needs Attention</span>
-                <span className="font-medium">{needsAttentionTrees} trees</span>
+                <span>Perlu Perhatian</span>
+                <span className="font-medium">{needsAttentionTrees} pohon</span>
               </div>
-              <Progress value={(needsAttentionTrees / totalTrees) * 100} className="h-2 bg-gray-100" indicatorColor="bg-amber-500" />
+              <Progress value={(needsAttentionTrees / totalTrees) * 100} className="h-2 bg-gray-100" />
             </div>
             
             <div className="space-y-1">
               <div className="flex justify-between text-sm">
-                <span>Critical</span>
-                <span className="font-medium">{criticalTrees} trees</span>
+                <span>Kritis</span>
+                <span className="font-medium">{criticalTrees} pohon</span>
               </div>
-              <Progress value={(criticalTrees / totalTrees) * 100} className="h-2 bg-gray-100" indicatorColor="bg-red-500" />
+              <Progress value={(criticalTrees / totalTrees) * 100} className="h-2 bg-gray-100" />
             </div>
           </div>
         </CardContent>
@@ -60,34 +60,34 @@ const DashboardOverview = () => {
         <CardHeader className="pb-2">
           <CardTitle className="text-lg flex items-center">
             <CalendarCheck className="h-5 w-5 mr-2 text-cashew-600" />
-            Maintenance Tasks
+            Tugas Pemeliharaan
           </CardTitle>
-          <CardDescription>Current maintenance task status</CardDescription>
+          <CardDescription>Status tugas pemeliharaan saat ini</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div className="space-y-1">
               <div className="flex justify-between text-sm">
-                <span>Pending</span>
-                <span className="font-medium">{pendingTasks} tasks</span>
+                <span>Tertunda</span>
+                <span className="font-medium">{pendingTasks} tugas</span>
               </div>
-              <Progress value={(pendingTasks / totalTasks) * 100} className="h-2 bg-gray-100" indicatorColor="bg-blue-500" />
+              <Progress value={(pendingTasks / totalTasks) * 100} className="h-2 bg-gray-100" />
             </div>
             
             <div className="space-y-1">
               <div className="flex justify-between text-sm">
-                <span>In Progress</span>
-                <span className="font-medium">{inProgressTasks} tasks</span>
+                <span>Dalam Proses</span>
+                <span className="font-medium">{inProgressTasks} tugas</span>
               </div>
-              <Progress value={(inProgressTasks / totalTasks) * 100} className="h-2 bg-gray-100" indicatorColor="bg-purple-500" />
+              <Progress value={(inProgressTasks / totalTasks) * 100} className="h-2 bg-gray-100" />
             </div>
             
             <div className="space-y-1">
               <div className="flex justify-between text-sm">
-                <span>Completed</span>
-                <span className="font-medium">{completedTasks} tasks</span>
+                <span>Selesai</span>
+                <span className="font-medium">{completedTasks} tugas</span>
               </div>
-              <Progress value={(completedTasks / totalTasks) * 100} className="h-2 bg-gray-100" indicatorColor="bg-green-500" />
+              <Progress value={(completedTasks / totalTasks) * 100} className="h-2 bg-gray-100" />
             </div>
           </div>
         </CardContent>
@@ -97,20 +97,20 @@ const DashboardOverview = () => {
         <CardHeader className="pb-2">
           <CardTitle className="text-lg flex items-center">
             <CloudSun className="h-5 w-5 mr-2 text-cashew-600" />
-            Weather Forecast
+            Prakiraan Cuaca
           </CardTitle>
-          <CardDescription>5-day weather forecast</CardDescription>
+          <CardDescription>Prakiraan cuaca 5 hari</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex justify-between">
-            {["sunny", "sunny", "cloudy", "rainy", "rainy"].map((condition, i) => (
+            {["cerah", "cerah", "berawan", "hujan", "hujan"].map((condition, i) => (
               <div key={i} className="flex flex-col items-center">
-                <span className="text-sm text-muted-foreground">{new Date(2025, 4, 5 + i).toLocaleDateString('en-US', { weekday: 'short' })}</span>
+                <span className="text-sm text-muted-foreground">{new Date(2025, 4, 5 + i).toLocaleDateString('id-ID', { weekday: 'short' })}</span>
                 <div className="my-2">
-                  {condition === 'sunny' && <div className="h-8 w-8 rounded-full bg-amber-400"></div>}
-                  {condition === 'cloudy' && <div className="h-8 w-8 rounded-full bg-gray-300"></div>}
-                  {condition === 'rainy' && <div className="h-8 w-8 rounded-full bg-blue-300"></div>}
-                  {condition === 'stormy' && <div className="h-8 w-8 rounded-full bg-gray-500"></div>}
+                  {condition === 'cerah' && <div className="h-8 w-8 rounded-full bg-amber-400"></div>}
+                  {condition === 'berawan' && <div className="h-8 w-8 rounded-full bg-gray-300"></div>}
+                  {condition === 'hujan' && <div className="h-8 w-8 rounded-full bg-blue-300"></div>}
+                  {condition === 'badai' && <div className="h-8 w-8 rounded-full bg-gray-500"></div>}
                 </div>
                 <span className="font-medium">{28 - i}°C</span>
               </div>

@@ -9,16 +9,16 @@ const AppHeader = () => {
     <header className="bg-background border-b px-4 py-3 flex items-center justify-between">
       <div className="flex items-center space-x-2">
         <div className="h-8 w-8 bg-cashew-600 rounded-md flex items-center justify-center">
-          <span className="text-white font-bold">CM</span>
+          <span className="text-white font-bold">PM</span>
         </div>
-        <h1 className="text-xl font-semibold text-cashew-800">CashewCare</h1>
+        <h1 className="text-xl font-semibold text-cashew-800">Pemeliharaan Jambu Mete</h1>
       </div>
       
       <div className="flex-1 max-w-md mx-4">
         <div className="relative">
           <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
           <Input 
-            placeholder="Search trees, tasks..." 
+            placeholder="Cari pohon, tugas..." 
             className="pl-8 bg-background"
           />
         </div>

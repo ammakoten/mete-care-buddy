@@ -5,14 +5,32 @@ import { Badge } from '@/components/ui/badge';
 import { trees } from '@/data/mockData';
 import { TreeDeciduous, CalendarCheck, MapPin, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
+import { useToast } from "@/hooks/use-toast";
 
 const TreeOverview = () => {
+  const { toast } = useToast();
+
+  const handleAddTree = () => {
+    toast({
+      title: "Tambah Pohon",
+      description: "Fitur untuk menambahkan pohon baru akan segera hadir!",
+    });
+  };
+
+  const handleViewDetails = (treeId: string) => {
+    toast({
+      title: "Detail Pohon",
+      description: `Melihat detail untuk pohon dengan ID: ${treeId}`,
+    });
+  };
+  
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-cashew-800">Tree Inventory</h2>
-        <Button className="bg-cashew-600 hover:bg-cashew-700">
-          Add New Tree
+        <h2 className="text-2xl font-bold text-cashew-800">Inventaris Pohon</h2>
+        <Button className="bg-cashew-600 hover:bg-cashew-700" onClick={handleAddTree}>
+          Tambah Pohon Baru
         </Button>
       </div>
       
@@ -34,7 +52,7 @@ const TreeOverview = () => {
                         : "bg-red-100 text-red-800 hover:bg-red-200"
                   }
                 >
-                  {tree.health === "healthy" ? "Healthy" : tree.health === "needs-attention" ? "Needs Attention" : "Critical"}
+                  {tree.health === "healthy" ? "Sehat" : tree.health === "needs-attention" ? "Perlu Perhatian" : "Kritis"}
                 </Badge>
               </div>
             </CardHeader>
@@ -42,19 +60,19 @@ const TreeOverview = () => {
               <div className="space-y-3">
                 <div className="flex items-center space-x-2 text-sm">
                   <CalendarCheck className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-muted-foreground">Last maintained: </span>
-                  <span>{new Date(tree.lastMaintenance).toLocaleDateString()}</span>
+                  <span className="text-muted-foreground">Pemeliharaan terakhir: </span>
+                  <span>{new Date(tree.lastMaintenance).toLocaleDateString('id-ID')}</span>
                 </div>
                 
                 <div className="flex items-center space-x-2 text-sm">
                   <MapPin className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-muted-foreground">Location: </span>
+                  <span className="text-muted-foreground">Lokasi: </span>
                   <span>{tree.location}</span>
                 </div>
                 
                 <div className="flex items-center space-x-2 text-sm">
                   <Info className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-muted-foreground">Variety: </span>
+                  <span className="text-muted-foreground">Varietas: </span>
                   <span>{tree.variety}</span>
                 </div>
                 
@@ -65,8 +83,13 @@ const TreeOverview = () => {
                 )}
                 
                 <div className="pt-3">
-                  <Button variant="outline" size="sm" className="w-full border-cashew-200 hover:bg-cashew-50 text-cashew-700">
-                    View Details
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full border-cashew-200 hover:bg-cashew-50 text-cashew-700"
+                    onClick={() => handleViewDetails(tree.id)}
+                  >
+                    Lihat Detail
                   </Button>
                 </div>
               </div>

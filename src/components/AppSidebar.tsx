@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { 
   Home, 
   TreeDeciduous, 
@@ -22,12 +22,14 @@ interface SidebarProps {
 interface SidebarItemProps {
   icon: React.ElementType;
   label: string;
-  active?: boolean;
   to: string;
   collapsed: boolean;
 }
 
-const SidebarItem = ({ icon: Icon, label, active, to, collapsed }: SidebarItemProps) => {
+const SidebarItem = ({ icon: Icon, label, to, collapsed }: SidebarItemProps) => {
+  const location = useLocation();
+  const active = location.pathname === to;
+
   return (
     <Link 
       to={to} 
@@ -59,15 +61,15 @@ const AppSidebar = ({ collapsed, toggleSidebar }: SidebarProps) => {
       </div>
       
       <nav className="flex-1 px-2 py-4">
-        <SidebarItem icon={Home} label="Dashboard" active to="/" collapsed={collapsed} />
-        <SidebarItem icon={TreeDeciduous} label="Trees" to="/trees" collapsed={collapsed} />
-        <SidebarItem icon={CalendarCheck} label="Maintenance" to="/tasks" collapsed={collapsed} />
-        <SidebarItem icon={CloudSun} label="Weather" to="/weather" collapsed={collapsed} />
-        <SidebarItem icon={BarChart} label="Analytics" to="/analytics" collapsed={collapsed} />
+        <SidebarItem icon={Home} label="Beranda" to="/" collapsed={collapsed} />
+        <SidebarItem icon={TreeDeciduous} label="Pohon" to="/trees" collapsed={collapsed} />
+        <SidebarItem icon={CalendarCheck} label="Pemeliharaan" to="/tasks" collapsed={collapsed} />
+        <SidebarItem icon={CloudSun} label="Cuaca" to="/weather" collapsed={collapsed} />
+        <SidebarItem icon={BarChart} label="Analitik" to="/analytics" collapsed={collapsed} />
       </nav>
       
       <div className="px-2 py-4 border-t">
-        <SidebarItem icon={Settings} label="Settings" to="/settings" collapsed={collapsed} />
+        <SidebarItem icon={Settings} label="Pengaturan" to="/settings" collapsed={collapsed} />
       </div>
     </aside>
   );
