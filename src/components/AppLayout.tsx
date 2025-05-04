@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import AppHeader from './AppHeader';
 import AppSidebar from './AppSidebar';
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 
 const AppLayout = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -30,6 +32,10 @@ const AppLayout = () => {
           <p>&copy; {new Date().getFullYear()} Aplikasi Pemeliharaan Jambu Mete. Semua hak dilindungi.</p>
         </footer>
       </div>
+      
+      {/* Add both toast components for notifications */}
+      <Toaster />
+      <SonnerToaster position="top-right" />
     </div>
   );
 };

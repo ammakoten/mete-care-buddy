@@ -3,9 +3,10 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { maintenanceTasks, trees } from '@/data/mockData';
-import { Calendar, AlertCircle, CheckCircle, Clock } from 'lucide-react';
+import { Calendar, AlertCircle, CheckCircle, Clock, Bell, BellRing } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 const getTreeName = (treeId: string) => {
   const tree = trees.find(t => t.id === treeId);
@@ -33,26 +34,48 @@ const getStatusIcon = (status: string) => {
 };
 
 const MaintenanceTasks = () => {
-  const { toast } = useToast();
+  const { toast: toastUI } = useToast();
 
   const handleScheduleTask = () => {
-    toast({
+    // Using shadcn toast
+    toastUI({
       title: "Jadwalkan Tugas",
       description: "Fitur untuk menjadwalkan tugas baru akan segera hadir!",
     });
   };
 
   const handleCompleteTask = (taskId: string) => {
-    toast({
-      title: "Tugas Selesai",
+    // Using sonner toast
+    toast.success("Tugas Selesai", {
       description: "Tugas berhasil ditandai sebagai selesai!",
+      icon: <CheckCircle className="h-4 w-4" />,
+      duration: 3000,
     });
   };
 
   const handleEditTask = (taskId: string) => {
-    toast({
-      title: "Edit Tugas",
+    // Using sonner toast with different style
+    toast("Edit Tugas", {
       description: `Mengedit tugas dengan ID: ${taskId}`,
+      action: {
+        label: "Lihat Detail",
+        onClick: () => showTaskDetail(taskId),
+      },
+    });
+  };
+  
+  const showTaskDetail = (taskId: string) => {
+    // This would normally open a modal or navigate to task detail page
+    toastUI({
+      title: "Detail Tugas",
+      description: `Menampilkan detail untuk tugas ${taskId}`,
+    });
+  };
+  
+  const handleRemindMe = (task: any) => {
+    toast("Pengingat Dibuat", {
+      description: `Anda akan diingatkan tentang: ${task.title}`,
+      icon: <BellRing className="h-4 w-4 text-cashew-600" />,
     });
   };
 
@@ -120,6 +143,14 @@ const MaintenanceTasks = () => {
                   onClick={() => handleEditTask(task.id)}
                 >
                   Edit Tugas
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="border-amber-200 hover:bg-amber-50 text-amber-700"
+                  onClick={() => handleRemindMe(task)}
+                >
+                  <Bell className="h-4 w-4 mr-1" /> Ingatkan Saya
                 </Button>
               </div>
             </CardContent>
