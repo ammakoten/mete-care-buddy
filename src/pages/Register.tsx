@@ -6,9 +6,11 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Eye, EyeOff } from 'lucide-react';
 import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Register = () => {
   const navigate = useNavigate();
+  const { register } = useAuth();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -17,7 +19,7 @@ const Register = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
@@ -27,19 +29,22 @@ const Register = () => {
       return;
     }
 
-    // Mock registration - in a real app, this would be an API call
-    setTimeout(() => {
-      if (name && email && password) {
-        // In a real app, this would create a new user in the backend
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('user', JSON.stringify({ name, email }));
+    try {
+      // Use the register function from AuthContext
+      const success = await register(name, email, password);
+      
+      if (success) {
         toast.success('Pendaftaran berhasil!');
+        // User is automatically logged in by the register function
         navigate('/');
       } else {
-        toast.error('Semua field harus diisi');
+        toast.error('Pendaftaran gagal. Silakan coba lagi.');
       }
+    } catch (error) {
+      toast.error('Terjadi kesalahan. Silakan coba lagi.');
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   const togglePasswordVisibility = () => {

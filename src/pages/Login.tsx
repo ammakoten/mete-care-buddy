@@ -6,31 +6,35 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Eye, EyeOff } from 'lucide-react';
 import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Mock login - in a real app, this would be an API call
-    setTimeout(() => {
-      if (email && password) {
-        // Demo credentials (in a real app, this would be authenticated against a backend)
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('user', JSON.stringify({ email: email }));
+    try {
+      // Use the login function from AuthContext
+      const success = await login(email, password);
+      
+      if (success) {
         toast.success('Login berhasil!');
         navigate('/');
       } else {
-        toast.error('Email dan password diperlukan');
+        toast.error('Login gagal. Periksa email dan kata sandi Anda.');
       }
+    } catch (error) {
+      toast.error('Terjadi kesalahan. Silakan coba lagi.');
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   const togglePasswordVisibility = () => {
