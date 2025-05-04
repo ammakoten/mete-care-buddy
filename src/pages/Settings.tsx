@@ -1,197 +1,187 @@
 
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState } from 'react';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { useAuth } from '@/contexts/AuthContext';
+import { toast } from 'sonner';
 
 const Settings = () => {
+  const { user } = useAuth();
+  const [name, setName] = useState(user?.name || '');
+  const [email, setEmail] = useState(user?.email || '');
+  const [notifications, setNotifications] = useState({
+    email: true,
+    app: true,
+    maintenance: true,
+    weather: false
+  });
+
+  const handleProfileSave = (e: React.FormEvent) => {
+    e.preventDefault();
+    // In a real app, you would send an API request to update the user's profile
+    toast.success('Profil berhasil diperbarui');
+  };
+
+  const handleNotificationsUpdate = () => {
+    // In a real app, you would send an API request to update notification settings
+    toast.success('Pengaturan notifikasi berhasil diperbarui');
+  };
+
+  const handlePasswordReset = (e: React.FormEvent) => {
+    e.preventDefault();
+    // In a real app, you would trigger a password reset flow
+    toast.success('Tautan reset kata sandi telah dikirim ke email Anda');
+  };
+
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-cashew-800 mb-2">Settings</h1>
-        <p className="text-muted-foreground">Manage your account and application preferences</p>
+        <h1 className="text-3xl font-bold text-cashew-800 mb-2">Pengaturan</h1>
+        <p className="text-muted-foreground">Kelola akun dan preferensi Anda</p>
       </div>
       
-      <Tabs defaultValue="account" className="w-full">
-        <TabsList className="grid grid-cols-3 w-[400px]">
-          <TabsTrigger value="account">Account</TabsTrigger>
-          <TabsTrigger value="notifications">Notifications</TabsTrigger>
-          <TabsTrigger value="system">System</TabsTrigger>
-        </TabsList>
+      <div className="grid gap-6 md:grid-cols-2">
+        {/* Profile Settings */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Profil Pengguna</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleProfileSave} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="name">Nama</Label>
+                <Input 
+                  id="name" 
+                  value={name} 
+                  onChange={(e) => setName(e.target.value)} 
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input 
+                  id="email" 
+                  type="email" 
+                  value={email} 
+                  onChange={(e) => setEmail(e.target.value)} 
+                />
+              </div>
+              <Button type="submit" className="bg-cashew-600 hover:bg-cashew-700">
+                Simpan Perubahan
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
         
-        <TabsContent value="account">
-          <Card>
-            <CardHeader>
-              <CardTitle>Account Information</CardTitle>
-              <CardDescription>Manage your account details</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Full Name</Label>
-                  <Input id="name" defaultValue="Admin User" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" defaultValue="admin@cashewcare.com" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="role">Role</Label>
-                  <Input id="role" defaultValue="Plantation Manager" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="phone">Phone Number</Label>
-                  <Input id="phone" defaultValue="+1234567890" />
-                </div>
+        {/* Notification Settings */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Pengaturan Notifikasi</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <Label htmlFor="email-notifications" className="font-medium">
+                  Notifikasi Email
+                </Label>
+                <p className="text-sm text-muted-foreground">
+                  Terima notifikasi melalui email
+                </p>
               </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="farm">Farm Name</Label>
-                <Input id="farm" defaultValue="Green Valley Cashew Plantation" />
+              <Switch 
+                id="email-notifications" 
+                checked={notifications.email} 
+                onCheckedChange={(checked) => {
+                  setNotifications({...notifications, email: checked});
+                }} 
+              />
+            </div>
+            <Separator />
+            <div className="flex items-center justify-between">
+              <div>
+                <Label htmlFor="app-notifications" className="font-medium">
+                  Notifikasi Aplikasi
+                </Label>
+                <p className="text-sm text-muted-foreground">
+                  Terima notifikasi dalam aplikasi
+                </p>
               </div>
-              
-              <div className="flex justify-end">
-                <Button>Save Changes</Button>
+              <Switch 
+                id="app-notifications" 
+                checked={notifications.app} 
+                onCheckedChange={(checked) => {
+                  setNotifications({...notifications, app: checked});
+                }} 
+              />
+            </div>
+            <Separator />
+            <div className="flex items-center justify-between">
+              <div>
+                <Label htmlFor="maintenance-alerts" className="font-medium">
+                  Pengingat Pemeliharaan
+                </Label>
+                <p className="text-sm text-muted-foreground">
+                  Notifikasi untuk tugas pemeliharaan yang akan datang
+                </p>
               </div>
-            </CardContent>
-          </Card>
-          
-          <Card className="mt-6">
-            <CardHeader>
-              <CardTitle>Password</CardTitle>
-              <CardDescription>Change your password</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="current-password">Current Password</Label>
-                <Input id="current-password" type="password" />
+              <Switch 
+                id="maintenance-alerts" 
+                checked={notifications.maintenance} 
+                onCheckedChange={(checked) => {
+                  setNotifications({...notifications, maintenance: checked});
+                }} 
+              />
+            </div>
+            <Separator />
+            <div className="flex items-center justify-between">
+              <div>
+                <Label htmlFor="weather-alerts" className="font-medium">
+                  Peringatan Cuaca
+                </Label>
+                <p className="text-sm text-muted-foreground">
+                  Notifikasi untuk perubahan cuaca yang signifikan
+                </p>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="new-password">New Password</Label>
-                <Input id="new-password" type="password" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="confirm-password">Confirm New Password</Label>
-                <Input id="confirm-password" type="password" />
-              </div>
-              
-              <div className="flex justify-end">
-                <Button>Update Password</Button>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+              <Switch 
+                id="weather-alerts" 
+                checked={notifications.weather} 
+                onCheckedChange={(checked) => {
+                  setNotifications({...notifications, weather: checked});
+                }}
+              />
+            </div>
+            <Button 
+              onClick={handleNotificationsUpdate} 
+              className="mt-4 bg-cashew-600 hover:bg-cashew-700"
+            >
+              Simpan Pengaturan
+            </Button>
+          </CardContent>
+        </Card>
         
-        <TabsContent value="notifications">
-          <Card>
-            <CardHeader>
-              <CardTitle>Notification Settings</CardTitle>
-              <CardDescription>Configure how you receive notifications</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Label htmlFor="task-notifications" className="text-base">Task Reminders</Label>
-                    <p className="text-sm text-muted-foreground">Receive notifications about upcoming maintenance tasks</p>
-                  </div>
-                  <Switch id="task-notifications" defaultChecked />
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Label htmlFor="weather-alerts" className="text-base">Weather Alerts</Label>
-                    <p className="text-sm text-muted-foreground">Get notified about significant weather changes</p>
-                  </div>
-                  <Switch id="weather-alerts" defaultChecked />
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Label htmlFor="health-alerts" className="text-base">Tree Health Alerts</Label>
-                    <p className="text-sm text-muted-foreground">Receive notifications about trees requiring attention</p>
-                  </div>
-                  <Switch id="health-alerts" defaultChecked />
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Label htmlFor="email-notifications" className="text-base">Email Notifications</Label>
-                    <p className="text-sm text-muted-foreground">Receive notifications via email</p>
-                  </div>
-                  <Switch id="email-notifications" defaultChecked />
-                </div>
+        {/* Security Settings */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Keamanan</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handlePasswordReset} className="space-y-4">
+              <div className="space-y-2">
+                <h3 className="text-lg font-medium">Ubah Kata Sandi</h3>
+                <p className="text-sm text-muted-foreground">
+                  Kami akan mengirimkan tautan reset kata sandi ke email Anda
+                </p>
               </div>
-              
-              <div className="flex justify-end">
-                <Button>Save Preferences</Button>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-        
-        <TabsContent value="system">
-          <Card>
-            <CardHeader>
-              <CardTitle>System Settings</CardTitle>
-              <CardDescription>Configure application preferences</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Label htmlFor="units" className="text-base">Temperature Units</Label>
-                    <p className="text-sm text-muted-foreground">Choose between Celsius and Fahrenheit</p>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Label htmlFor="celsius" className="text-sm">Celsius</Label>
-                    <Switch id="celsius" defaultChecked />
-                    <Label htmlFor="fahrenheit" className="text-sm">Fahrenheit</Label>
-                  </div>
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Label htmlFor="auto-backup" className="text-base">Automatic Backups</Label>
-                    <p className="text-sm text-muted-foreground">Automatically backup your data weekly</p>
-                  </div>
-                  <Switch id="auto-backup" defaultChecked />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="language" className="text-base">Language</Label>
-                  <div className="flex space-x-2">
-                    <Button variant="outline" className="flex-1">English</Button>
-                    <Button variant="outline" className="flex-1">Spanish</Button>
-                    <Button variant="outline" className="flex-1">Portuguese</Button>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex justify-end">
-                <Button>Save Settings</Button>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card className="mt-6">
-            <CardHeader>
-              <CardTitle>Data Management</CardTitle>
-              <CardDescription>Manage your application data</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center space-x-4">
-                <Button variant="outline">Export Data</Button>
-                <Button variant="outline">Import Data</Button>
-                <Button variant="destructive">Reset All Data</Button>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+              <Button type="submit" variant="outline">
+                Kirim Tautan Reset Kata Sandi
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };
