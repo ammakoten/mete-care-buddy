@@ -14,6 +14,11 @@ const CombinedFile = () => {
     window.open("/combined-html.html", "_blank");
   };
 
+  const handleViewCashewApp = () => {
+    // Open our new cashew app HTML file in a new tab
+    window.open("/cashew-maintenance.html", "_blank");
+  };
+
   return (
     <div className="p-6">
       {/* HTML structure */}
@@ -64,7 +69,14 @@ const CombinedFile = () => {
               onClick={handleViewHTML}
               className="bg-cashew-500 hover:bg-cashew-600 ml-4"
             >
-              Lihat Versi HTML
+              Lihat Versi HTML Sederhana
+            </Button>
+            
+            <Button
+              onClick={handleViewCashewApp}
+              className="bg-cashew-600 hover:bg-cashew-700 ml-4"
+            >
+              Lihat Aplikasi Jambu Mete
             </Button>
             
             <div className="mt-4">
