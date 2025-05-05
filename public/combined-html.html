@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML, CSS, dan JavaScript</title>
+  <style>
+    /* CSS styling */
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      background-color: #f8faee;
+      margin: 0;
+      padding: 24px;
+      color: #394226;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      font-size: 1.875rem;
+      font-weight: 700;
+      color: #45512b;
+      margin-bottom: 1rem;
+    }
+    
+    .card {
+      background-color: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #57652f;
+      margin-bottom: 0.75rem;
+    }
+    
+    p {
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+    
+    .feature-block {
+      border-left: 4px solid #94a544;
+      padding-left: 1rem;
+      background-color: #f8faee;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+    
+    h3 {
+      font-weight: 600;
+      color: #738435;
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+    }
+    
+    ul {
+      list-style-type: disc;
+      padding-left: 1.25rem;
+    }
+    
+    li {
+      margin-bottom: 0.5rem;
+    }
+    
+    .button {
+      background-color: #94a544;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 0.25rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    
+    .button:hover {
+      background-color: #738435;
+    }
+    
+    .text-center {
+      text-align: center;
+    }
+    
+    .mt-6 {
+      margin-top: 1.5rem;
+    }
+    
+    .mt-8 {
+      margin-top: 2rem;
+    }
+    
+    .footer {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid #eef2d8;
+      font-size: 0.875rem;
+      color: #777;
+    }
+    
+    .back-link {
+      color: #94a544;
+      text-decoration: none;
+      margin-top: 1rem;
+      display: inline-block;
+    }
+    
+    .back-link:hover {
+      color: #738435;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <!-- HTML structure -->
+  <div class="container">
+    <h1>Dokumen HTML, CSS dan JavaScript</h1>
+    
+    <div class="card">
+      <h2>Pendahuluan</h2>
+      <p>
+        Ini adalah contoh dokumen yang menggabungkan HTML, CSS, dan JavaScript dalam satu file.
+        Dalam pengembangan web modern, ketiga teknologi ini bekerja sama untuk membuat aplikasi web
+        yang interaktif dan menarik.
+      </p>
+      
+      <!-- Elemen dengan styling khusus -->
+      <div class="feature-block">
+        <h3>HTML</h3>
+        <p>Merupakan bahasa markup yang digunakan untuk membuat struktur halaman web</p>
+      </div>
+      
+      <div class="feature-block">
+        <h3>CSS</h3>
+        <p>Merupakan bahasa styling yang digunakan untuk mengatur tampilan halaman web</p>
+      </div>
+      
+      <div class="feature-block">
+        <h3>JavaScript</h3>
+        <p>Merupakan bahasa pemrograman yang digunakan untuk membuat interaksi di halaman web</p>
+      </div>
+      
+      <h2>Tujuan Prototipe</h2>
+      <ul>
+        <li>Menunjukkan integrasi antara HTML, CSS, dan JavaScript</li>
+        <li>Memberikan contoh interaktivitas sederhana dengan JavaScript</li>
+        <li>Menampilkan gaya dan layout dengan CSS</li>
+        <li>Menjadi dokumen referensi untuk pengembangan aplikasi web</li>
+      </ul>
+      
+      <div class="text-center mt-6">
+        <button class="button" id="action-button">Klik Saya!</button>
+        <div style="margin-top: 1rem;">
+          <a href="/" class="back-link">Kembali ke Aplikasi</a>
+        </div>
+      </div>
+      
+      <div class="footer">
+        <p>
+          Pada pengembangan aplikasi web modern seperti React, HTML ditulis dalam bentuk JSX,
+          CSS dapat diaplikasikan menggunakan framework seperti Tailwind CSS, dan JavaScript
+          terintegrasi langsung dalam komponen yang sama.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // JavaScript logic
+    document.addEventListener('DOMContentLoaded', function() {
+      var actionButton = document.getElementById('action-button');
+      
+      actionButton.addEventListener('click', function() {
+        alert('Tombol diklik!');
+      });
+    });
+  </script>
+</body>
+</html>

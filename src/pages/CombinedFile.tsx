@@ -1,11 +1,17 @@
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const CombinedFile = () => {
   // JavaScript logic
   const handleClick = () => {
     alert('Tombol diklik!');
+  };
+
+  const handleViewHTML = () => {
+    // Open the HTML version in a new tab
+    window.open("/combined-html.html", "_blank");
   };
 
   return (
@@ -53,6 +59,22 @@ const CombinedFile = () => {
             >
               Klik Saya!
             </Button>
+            
+            <Button
+              onClick={handleViewHTML}
+              className="bg-cashew-500 hover:bg-cashew-600 ml-4"
+            >
+              Lihat Versi HTML
+            </Button>
+            
+            <div className="mt-4">
+              <Link 
+                to="/"
+                className="text-cashew-600 hover:text-cashew-800 hover:underline"
+              >
+                Kembali ke Dashboard
+              </Link>
+            </div>
           </div>
           
           <div className="mt-8 border-t pt-4 text-sm text-gray-500">
