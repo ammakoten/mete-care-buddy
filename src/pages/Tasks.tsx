@@ -76,8 +76,7 @@ const Tasks = () => {
   };
   
   const sendMessage = () => {
-    toast({
-      title: "Pesan Terkirim",
+    toast("Pesan Terkirim", {
       description: "Pesan telah berhasil dikirim ke tim",
       icon: <MessageCircle className="h-4 w-4" />,
     });
@@ -263,3 +262,4 @@ const Tasks = () => {
 };
 
 export default Tasks;
+
