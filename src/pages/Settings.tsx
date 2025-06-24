@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
-import { User, Bell, Shield, Languages, HelpCircle } from 'lucide-react';
+import { User, Bell, Shield, Languages, HelpCircle, Save, Mail, Lock } from 'lucide-react';
 import LanguageSettings from '@/components/LanguageSettings';
 import HelpSupport from '@/components/HelpSupport';
 
@@ -39,234 +39,267 @@ const Settings = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cashew-50 to-white p-4 animate-fade-in">
-      <div className="max-w-6xl mx-auto space-y-8">
-        {/* Header Section */}
-        <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold text-cashew-800 mb-2">Pengaturan</h1>
-          <p className="text-cashew-600 text-lg">Kelola akun dan preferensi Anda dengan mudah</p>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="py-6">
+            <h1 className="text-2xl font-semibold text-gray-900">Pengaturan</h1>
+            <p className="mt-1 text-sm text-gray-500">
+              Kelola akun dan preferensi aplikasi Anda
+            </p>
+          </div>
         </div>
+      </div>
 
-        {/* User Profile Card */}
-        <Card className="shadow-lg border-0 bg-gradient-to-r from-cashew-500 to-cashew-600 text-white overflow-hidden">
-          <CardContent className="p-8">
-            <div className="flex items-center space-x-6">
-              <div className="h-20 w-20 bg-white rounded-full flex items-center justify-center shadow-lg">
-                <span className="text-cashew-700 font-bold text-3xl">{name.charAt(0).toUpperCase()}</span>
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold">{name || 'Pengguna'}</h2>
-                <p className="text-cashew-100 text-lg">{email}</p>
-                <div className="mt-2 px-3 py-1 bg-white/20 rounded-full text-sm w-fit">
-                  Akun Aktif
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Settings Tabs */}
-        <Tabs defaultValue="profile" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5 bg-white shadow-sm border border-cashew-200 p-1">
-            <TabsTrigger 
-              value="profile" 
-              className="flex items-center space-x-2 data-[state=active]:bg-cashew-500 data-[state=active]:text-white"
-            >
-              <User className="h-4 w-4" />
-              <span className="hidden sm:inline">Profil</span>
-            </TabsTrigger>
-            <TabsTrigger 
-              value="notifications"
-              className="flex items-center space-x-2 data-[state=active]:bg-cashew-500 data-[state=active]:text-white"
-            >
-              <Bell className="h-4 w-4" />
-              <span className="hidden sm:inline">Notifikasi</span>
-            </TabsTrigger>
-            <TabsTrigger 
-              value="security"
-              className="flex items-center space-x-2 data-[state=active]:bg-cashew-500 data-[state=active]:text-white"
-            >
-              <Shield className="h-4 w-4" />
-              <span className="hidden sm:inline">Keamanan</span>
-            </TabsTrigger>
-            <TabsTrigger 
-              value="language"
-              className="flex items-center space-x-2 data-[state=active]:bg-cashew-500 data-[state=active]:text-white"
-            >
-              <Languages className="h-4 w-4" />
-              <span className="hidden sm:inline">Bahasa</span>
-            </TabsTrigger>
-            <TabsTrigger 
-              value="help"
-              className="flex items-center space-x-2 data-[state=active]:bg-cashew-500 data-[state=active]:text-white"
-            >
-              <HelpCircle className="h-4 w-4" />
-              <span className="hidden sm:inline">Bantuan</span>
-            </TabsTrigger>
-          </TabsList>
-
-          {/* Profile Tab */}
-          <TabsContent value="profile">
-            <Card className="shadow-lg border-cashew-200">
-              <CardHeader className="bg-gradient-to-r from-cashew-50 to-cashew-100 border-b border-cashew-200">
-                <CardTitle className="flex items-center text-cashew-800">
-                  <User className="mr-3 h-6 w-6 text-cashew-600" />
-                  Informasi Profil
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-8">
-                <form onSubmit={handleProfileSave} className="space-y-8">
-                  <div className="grid gap-8 md:grid-cols-2">
-                    <div className="space-y-3">
-                      <Label htmlFor="name" className="text-cashew-700 font-medium text-base">Nama Lengkap</Label>
-                      <Input 
-                        id="name" 
-                        value={name} 
-                        onChange={(e) => setName(e.target.value)} 
-                        className="border-cashew-200 h-12 text-base"
-                        placeholder="Masukkan nama lengkap"
-                      />
-                    </div>
-                    <div className="space-y-3">
-                      <Label htmlFor="email" className="text-cashew-700 font-medium text-base">Alamat Email</Label>
-                      <Input 
-                        id="email" 
-                        type="email" 
-                        value={email} 
-                        onChange={(e) => setEmail(e.target.value)} 
-                        className="border-cashew-200 h-12 text-base"
-                        placeholder="Masukkan alamat email"
-                      />
-                    </div>
-                  </div>
-                  <div className="pt-4">
-                    <Button type="submit" className="bg-cashew-600 hover:bg-cashew-700 h-12 px-8 text-base">
-                      Simpan Perubahan Profil
-                    </Button>
-                  </div>
-                </form>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Notifications Tab */}
-          <TabsContent value="notifications">
-            <Card className="shadow-lg border-cashew-200">
-              <CardHeader className="bg-gradient-to-r from-cashew-50 to-cashew-100 border-b border-cashew-200">
-                <CardTitle className="flex items-center text-cashew-800">
-                  <Bell className="mr-3 h-6 w-6 text-cashew-600" />
-                  Pengaturan Notifikasi
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-8 space-y-8">
-                <div className="space-y-6">
-                  <div className="flex items-center justify-between p-4 bg-cashew-50 rounded-lg">
-                    <div className="space-y-1">
-                      <Label className="font-medium text-cashew-800 text-base">Notifikasi Email</Label>
-                      <p className="text-sm text-cashew-600">Terima pemberitahuan penting melalui email</p>
-                    </div>
-                    <Switch 
-                      checked={notifications.email} 
-                      onCheckedChange={(checked) => setNotifications({...notifications, email: checked})} 
-                    />
-                  </div>
-                  
-                  <div className="flex items-center justify-between p-4 bg-cashew-50 rounded-lg">
-                    <div className="space-y-1">
-                      <Label className="font-medium text-cashew-800 text-base">Notifikasi Aplikasi</Label>
-                      <p className="text-sm text-cashew-600">Terima notifikasi push dalam aplikasi</p>
-                    </div>
-                    <Switch 
-                      checked={notifications.app} 
-                      onCheckedChange={(checked) => setNotifications({...notifications, app: checked})} 
-                    />
-                  </div>
-                  
-                  <div className="flex items-center justify-between p-4 bg-cashew-50 rounded-lg">
-                    <div className="space-y-1">
-                      <Label className="font-medium text-cashew-800 text-base">Pengingat Pemeliharaan</Label>
-                      <p className="text-sm text-cashew-600">Notifikasi untuk jadwal pemeliharaan pohon</p>
-                    </div>
-                    <Switch 
-                      checked={notifications.maintenance} 
-                      onCheckedChange={(checked) => setNotifications({...notifications, maintenance: checked})} 
-                    />
-                  </div>
-                  
-                  <div className="flex items-center justify-between p-4 bg-cashew-50 rounded-lg">
-                    <div className="space-y-1">
-                      <Label className="font-medium text-cashew-800 text-base">Peringatan Cuaca</Label>
-                      <p className="text-sm text-cashew-600">Notifikasi kondisi cuaca yang mempengaruhi tanaman</p>
-                    </div>
-                    <Switch 
-                      checked={notifications.weather} 
-                      onCheckedChange={(checked) => setNotifications({...notifications, weather: checked})}
-                    />
-                  </div>
-                </div>
-                
-                <div className="pt-4">
-                  <Button 
-                    onClick={handleNotificationsUpdate} 
-                    className="bg-cashew-600 hover:bg-cashew-700 h-12 px-8 text-base"
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="lg:grid lg:grid-cols-12 lg:gap-x-8">
+          {/* Sidebar Navigation */}
+          <aside className="lg:col-span-3">
+            <nav className="space-y-1">
+              <Tabs defaultValue="profile" orientation="vertical" className="flex flex-col lg:flex-row gap-6">
+                <TabsList className="lg:flex-col lg:h-auto lg:w-full bg-white border border-gray-200 p-1">
+                  <TabsTrigger 
+                    value="profile" 
+                    className="w-full justify-start px-3 py-2 text-left data-[state=active]:bg-cashew-50 data-[state=active]:text-cashew-700 data-[state=active]:border-cashew-200"
                   >
-                    Simpan Pengaturan Notifikasi
-                  </Button>
+                    <User className="h-4 w-4 mr-2" />
+                    Informasi Profil
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="notifications"
+                    className="w-full justify-start px-3 py-2 text-left data-[state=active]:bg-cashew-50 data-[state=active]:text-cashew-700 data-[state=active]:border-cashew-200"
+                  >
+                    <Bell className="h-4 w-4 mr-2" />
+                    Notifikasi
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="security"
+                    className="w-full justify-start px-3 py-2 text-left data-[state=active]:bg-cashew-50 data-[state=active]:text-cashew-700 data-[state=active]:border-cashew-200"
+                  >
+                    <Shield className="h-4 w-4 mr-2" />
+                    Keamanan
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="language"
+                    className="w-full justify-start px-3 py-2 text-left data-[state=active]:bg-cashew-50 data-[state=active]:text-cashew-700 data-[state=active]:border-cashew-200"
+                  >
+                    <Languages className="h-4 w-4 mr-2" />
+                    Bahasa
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="help"
+                    className="w-full justify-start px-3 py-2 text-left data-[state=active]:bg-cashew-50 data-[state=active]:text-cashew-700 data-[state=active]:border-cashew-200"
+                  >
+                    <HelpCircle className="h-4 w-4 mr-2" />
+                    Bantuan
+                  </TabsTrigger>
+                </TabsList>
+
+                {/* Main Content */}
+                <div className="lg:col-span-9 space-y-6">
+                  {/* Profile Tab */}
+                  <TabsContent value="profile" className="mt-0">
+                    <Card className="shadow-sm">
+                      <CardHeader className="border-b border-gray-200">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <CardTitle className="text-lg font-medium text-gray-900">
+                              Informasi Profil
+                            </CardTitle>
+                            <p className="mt-1 text-sm text-gray-500">
+                              Perbarui informasi profil dan alamat email Anda
+                            </p>
+                          </div>
+                          <div className="flex items-center space-x-3">
+                            <div className="h-12 w-12 bg-gradient-to-br from-cashew-500 to-cashew-600 rounded-full flex items-center justify-center">
+                              <span className="text-white font-semibold text-lg">
+                                {name.charAt(0).toUpperCase()}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="p-6">
+                        <form onSubmit={handleProfileSave} className="space-y-6">
+                          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                            <div>
+                              <Label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                Nama Lengkap
+                              </Label>
+                              <div className="mt-1">
+                                <Input 
+                                  id="name" 
+                                  value={name} 
+                                  onChange={(e) => setName(e.target.value)} 
+                                  className="shadow-sm"
+                                  placeholder="Masukkan nama lengkap"
+                                />
+                              </div>
+                            </div>
+                            <div>
+                              <Label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                                Alamat Email
+                              </Label>
+                              <div className="mt-1">
+                                <Input 
+                                  id="email" 
+                                  type="email" 
+                                  value={email} 
+                                  onChange={(e) => setEmail(e.target.value)} 
+                                  className="shadow-sm"
+                                  placeholder="Masukkan alamat email"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex justify-end">
+                            <Button type="submit" className="bg-cashew-600 hover:bg-cashew-700">
+                              <Save className="h-4 w-4 mr-2" />
+                              Simpan Perubahan
+                            </Button>
+                          </div>
+                        </form>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+
+                  {/* Notifications Tab */}
+                  <TabsContent value="notifications" className="mt-0">
+                    <Card className="shadow-sm">
+                      <CardHeader className="border-b border-gray-200">
+                        <CardTitle className="text-lg font-medium text-gray-900">
+                          Pengaturan Notifikasi
+                        </CardTitle>
+                        <p className="mt-1 text-sm text-gray-500">
+                          Kelola preferensi notifikasi Anda
+                        </p>
+                      </CardHeader>
+                      <CardContent className="p-6">
+                        <div className="space-y-6">
+                          <div className="space-y-4">
+                            {[
+                              {
+                                key: 'email',
+                                title: 'Notifikasi Email',
+                                description: 'Terima pemberitahuan penting melalui email',
+                                icon: Mail
+                              },
+                              {
+                                key: 'app',
+                                title: 'Notifikasi Aplikasi', 
+                                description: 'Terima notifikasi push dalam aplikasi',
+                                icon: Bell
+                              },
+                              {
+                                key: 'maintenance',
+                                title: 'Pengingat Pemeliharaan',
+                                description: 'Notifikasi untuk jadwal pemeliharaan pohon',
+                                icon: Bell
+                              },
+                              {
+                                key: 'weather',
+                                title: 'Peringatan Cuaca',
+                                description: 'Notifikasi kondisi cuaca yang mempengaruhi tanaman',
+                                icon: Bell
+                              }
+                            ].map((item) => (
+                              <div key={item.key} className="flex items-center justify-between py-3">
+                                <div className="flex items-start space-x-3">
+                                  <item.icon className="h-5 w-5 text-gray-400 mt-0.5" />
+                                  <div>
+                                    <Label className="text-sm font-medium text-gray-900">
+                                      {item.title}
+                                    </Label>
+                                    <p className="text-sm text-gray-500">{item.description}</p>
+                                  </div>
+                                </div>
+                                <Switch 
+                                  checked={notifications[item.key as keyof typeof notifications]} 
+                                  onCheckedChange={(checked) => 
+                                    setNotifications({...notifications, [item.key]: checked})
+                                  } 
+                                />
+                              </div>
+                            ))}
+                          </div>
+                          <div className="flex justify-end pt-4 border-t border-gray-200">
+                            <Button 
+                              onClick={handleNotificationsUpdate} 
+                              className="bg-cashew-600 hover:bg-cashew-700"
+                            >
+                              <Save className="h-4 w-4 mr-2" />
+                              Simpan Pengaturan
+                            </Button>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+
+                  {/* Security Tab */}
+                  <TabsContent value="security" className="mt-0">
+                    <Card className="shadow-sm">
+                      <CardHeader className="border-b border-gray-200">
+                        <CardTitle className="text-lg font-medium text-gray-900">
+                          Keamanan Akun
+                        </CardTitle>
+                        <p className="mt-1 text-sm text-gray-500">
+                          Kelola keamanan dan kata sandi akun Anda
+                        </p>
+                      </CardHeader>
+                      <CardContent className="p-6">
+                        <div className="space-y-6">
+                          <div className="bg-gray-50 rounded-lg p-4">
+                            <div className="flex items-start space-x-3">
+                              <Lock className="h-5 w-5 text-gray-400 mt-0.5" />
+                              <div className="flex-1">
+                                <h4 className="text-sm font-medium text-gray-900">
+                                  Ubah Kata Sandi
+                                </h4>
+                                <p className="mt-1 text-sm text-gray-500">
+                                  Untuk keamanan akun Anda, kami akan mengirimkan tautan reset kata sandi ke email terdaftar
+                                </p>
+                                <div className="mt-4">
+                                  <Button 
+                                    onClick={handlePasswordReset}
+                                    variant="outline" 
+                                    className="text-sm"
+                                  >
+                                    Kirim Tautan Reset
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                            <h4 className="text-sm font-medium text-amber-800">Tips Keamanan</h4>
+                            <ul className="mt-2 text-sm text-amber-700 space-y-1">
+                              <li>• Gunakan kata sandi yang kuat dan unik</li>
+                              <li>• Jangan berbagi informasi login dengan orang lain</li>
+                              <li>• Selalu logout setelah menggunakan perangkat umum</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+
+                  {/* Language Tab */}
+                  <TabsContent value="language" className="mt-0">
+                    <LanguageSettings />
+                  </TabsContent>
+
+                  {/* Help Tab */}
+                  <TabsContent value="help" className="mt-0">
+                    <HelpSupport />
+                  </TabsContent>
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Security Tab */}
-          <TabsContent value="security">
-            <Card className="shadow-lg border-cashew-200">
-              <CardHeader className="bg-gradient-to-r from-cashew-50 to-cashew-100 border-b border-cashew-200">
-                <CardTitle className="flex items-center text-cashew-800">
-                  <Shield className="mr-3 h-6 w-6 text-cashew-600" />
-                  Pengaturan Keamanan
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-8">
-                <div className="space-y-8">
-                  <div className="bg-cashew-50 p-6 rounded-lg">
-                    <h3 className="text-xl font-semibold text-cashew-800 mb-3">Ubah Kata Sandi</h3>
-                    <p className="text-cashew-600 mb-6">
-                      Untuk keamanan akun Anda, kami akan mengirimkan tautan reset kata sandi ke email terdaftar
-                    </p>
-                    <form onSubmit={handlePasswordReset}>
-                      <Button 
-                        type="submit" 
-                        variant="outline" 
-                        className="border-cashew-300 hover:bg-cashew-50 h-12 px-8 text-base"
-                      >
-                        Kirim Tautan Reset Kata Sandi
-                      </Button>
-                    </form>
-                  </div>
-                  
-                  <div className="bg-amber-50 p-6 rounded-lg border border-amber-200">
-                    <h4 className="font-medium text-amber-800 mb-2">Tips Keamanan</h4>
-                    <ul className="text-sm text-amber-700 space-y-1">
-                      <li>• Gunakan kata sandi yang kuat dan unik</li>
-                      <li>• Jangan berbagi informasi login dengan orang lain</li>
-                      <li>• Selalu logout setelah menggunakan perangkat umum</li>
-                    </ul>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Language Tab */}
-          <TabsContent value="language">
-            <LanguageSettings />
-          </TabsContent>
-
-          {/* Help Tab */}
-          <TabsContent value="help">
-            <HelpSupport />
-          </TabsContent>
-        </Tabs>
+              </Tabs>
+            </nav>
+          </aside>
+        </div>
       </div>
     </div>
   );
