@@ -8,12 +8,15 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
-import { User, Bell, Shield, Languages, HelpCircle } from 'lucide-react';
+import { User, Bell, Shield, Settings as SettingsIcon } from 'lucide-react';
+import LanguageSettings from '@/components/LanguageSettings';
+import HelpSupport from '@/components/HelpSupport';
 
 const Settings = () => {
   const { user } = useAuth();
   const [name, setName] = useState(user?.name || '');
   const [email, setEmail] = useState(user?.email || '');
+  const [activeSection, setActiveSection] = useState('profile');
   const [notifications, setNotifications] = useState({
     email: true,
     app: true,
@@ -23,19 +26,32 @@ const Settings = () => {
 
   const handleProfileSave = (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, you would send an API request to update the user's profile
     toast.success('Profil berhasil diperbarui');
   };
 
   const handleNotificationsUpdate = () => {
-    // In a real app, you would send an API request to update notification settings
     toast.success('Pengaturan notifikasi berhasil diperbarui');
   };
 
   const handlePasswordReset = (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, you would trigger a password reset flow
     toast.success('Tautan reset kata sandi telah dikirim ke email Anda');
+  };
+
+  const menuItems = [
+    { id: 'profile', label: 'Profil', icon: User },
+    { id: 'notifications', label: 'Notifikasi', icon: Bell },
+    { id: 'security', label: 'Keamanan', icon: Shield },
+    { id: 'language', label: 'Bahasa', icon: LanguageSettings },
+    { id: 'help', label: 'Bantuan', icon: HelpSupport }
+  ];
+
+  const handleMenuClick = (sectionId: string) => {
+    setActiveSection(sectionId);
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
@@ -61,34 +77,35 @@ const Settings = () => {
           </Card>
         </div>
 
-        {/* Sidebar navigation */}
+        {/* Enhanced Sidebar navigation */}
         <div className="md:col-span-1">
-          <Card className="shadow-sm border-cashew-200">
+          <Card className="shadow-sm border-cashew-200 sticky top-4">
             <CardHeader className="pb-3">
-              <CardTitle className="text-lg">Menu Pengaturan</CardTitle>
+              <CardTitle className="text-lg flex items-center">
+                <SettingsIcon className="mr-2 h-5 w-5" />
+                Menu Pengaturan
+              </CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <nav className="space-y-1">
-                <a href="#profile" className="flex items-center px-6 py-3 hover:bg-cashew-50 text-cashew-800 font-medium border-l-4 border-cashew-500">
-                  <User className="mr-3 h-5 w-5 text-cashew-600" />
-                  <span>Profil</span>
-                </a>
-                <a href="#notifications" className="flex items-center px-6 py-3 hover:bg-cashew-50 text-cashew-700 border-l-4 border-transparent">
-                  <Bell className="mr-3 h-5 w-5 text-cashew-500" />
-                  <span>Notifikasi</span>
-                </a>
-                <a href="#security" className="flex items-center px-6 py-3 hover:bg-cashew-50 text-cashew-700 border-l-4 border-transparent">
-                  <Shield className="mr-3 h-5 w-5 text-cashew-500" />
-                  <span>Keamanan</span>
-                </a>
-                <a href="#language" className="flex items-center px-6 py-3 hover:bg-cashew-50 text-cashew-700 border-l-4 border-transparent">
-                  <Languages className="mr-3 h-5 w-5 text-cashew-500" />
-                  <span>Bahasa</span>
-                </a>
-                <a href="#help" className="flex items-center px-6 py-3 hover:bg-cashew-50 text-cashew-700 border-l-4 border-transparent">
-                  <HelpCircle className="mr-3 h-5 w-5 text-cashew-500" />
-                  <span>Bantuan</span>
-                </a>
+                {menuItems.map((item) => {
+                  const IconComponent = item.icon;
+                  const isActive = activeSection === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => handleMenuClick(item.id)}
+                      className={`w-full flex items-center px-6 py-3 text-left hover:bg-cashew-50 transition-colors border-l-4 ${
+                        isActive 
+                          ? 'border-cashew-500 bg-cashew-50 text-cashew-800 font-medium' 
+                          : 'border-transparent text-cashew-700 hover:border-cashew-200'
+                      }`}
+                    >
+                      <IconComponent className="mr-3 h-5 w-5 text-cashew-600" />
+                      <span>{item.label}</span>
+                    </button>
+                  );
+                })}
               </nav>
             </CardContent>
           </Card>
@@ -251,6 +268,12 @@ const Settings = () => {
               </form>
             </CardContent>
           </Card>
+
+          {/* Language Settings */}
+          <LanguageSettings />
+
+          {/* Help Support */}
+          <HelpSupport />
         </div>
       </div>
     </div>
