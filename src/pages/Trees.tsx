@@ -6,23 +6,74 @@ import { toast } from "sonner";
 import { Plus, Filter, Search as SearchIcon, TreeDeciduous, TrendingUp, AlertTriangle, CheckCircle, Grid3X3, List } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import TreeOverview from '@/components/TreeOverview';
+import { useNavigate } from 'react-router-dom';
 
 const Trees = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const navigate = useNavigate();
 
   const handleAddTree = () => {
-    toast.info('Fitur tambah pohon akan segera tersedia');
+    navigate('/settings');
+    toast.success('Mengarahkan ke pengaturan untuk menambah pohon baru');
   };
 
   const handleFilter = () => {
-    toast.info('Fitur filter akan segera tersedia');
+    navigate('/analytics');
+    toast.success('Menampilkan filter lanjutan di halaman analitik');
   };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery) {
       toast.success(`Mencari pohon: ${searchQuery}`);
+    }
+  };
+
+  const handleStatClick = (statType: string, count: number) => {
+    switch(statType) {
+      case 'healthy':
+        navigate('/analytics');
+        toast.success(`Menampilkan ${count} pohon sehat`);
+        break;
+      case 'attention':
+        navigate('/tasks');
+        toast.success(`Menampilkan ${count} pohon yang perlu perhatian`);
+        break;
+      case 'critical':
+        navigate('/weather');
+        toast.success(`Menampilkan ${count} pohon dengan status kritis`);
+        break;
+      case 'growth':
+        navigate('/analytics');
+        toast.success('Menampilkan data pertumbuhan pohon');
+        break;
+    }
+  };
+
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const sortType = e.target.value;
+    toast.success(`Mengurutkan berdasarkan: ${sortType}`);
+  };
+
+  const handleFilterButtonClick = (filterType: string) => {
+    switch(filterType) {
+      case 'status':
+        navigate('/tasks');
+        toast.success('Filter berdasarkan status kesehatan');
+        break;
+      case 'location':
+        navigate('/weather');
+        toast.success('Filter berdasarkan lokasi');
+        break;
+      case 'variety':
+        navigate('/analytics');
+        toast.success('Filter berdasarkan varietas');
+        break;
+      case 'age':
+        navigate('/analytics');
+        toast.success('Filter berdasarkan umur pohon');
+        break;
     }
   };
 
@@ -82,7 +133,10 @@ const Trees = () => {
       <div className="max-w-7xl mx-auto px-4 py-6">
         {/* Quick Stats Section - Shopee Style Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <Card className="bg-white border border-gray-200 hover:shadow-lg transition-shadow duration-200">
+          <Card 
+            className="bg-white border border-gray-200 hover:shadow-lg transition-shadow duration-200 cursor-pointer"
+            onClick={() => handleStatClick('healthy', 42)}
+          >
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -97,7 +151,10 @@ const Trees = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-white border border-gray-200 hover:shadow-lg transition-shadow duration-200">
+          <Card 
+            className="bg-white border border-gray-200 hover:shadow-lg transition-shadow duration-200 cursor-pointer"
+            onClick={() => handleStatClick('attention', 4)}
+          >
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -112,7 +169,10 @@ const Trees = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-white border border-gray-200 hover:shadow-lg transition-shadow duration-200">
+          <Card 
+            className="bg-white border border-gray-200 hover:shadow-lg transition-shadow duration-200 cursor-pointer"
+            onClick={() => handleStatClick('critical', 1)}
+          >
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -127,7 +187,10 @@ const Trees = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-white border border-gray-200 hover:shadow-lg transition-shadow duration-200">
+          <Card 
+            className="bg-white border border-gray-200 hover:shadow-lg transition-shadow duration-200 cursor-pointer"
+            onClick={() => handleStatClick('growth', 0)}
+          >
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -149,16 +212,36 @@ const Trees = () => {
             <div className="flex items-center space-x-4">
               <span className="text-sm font-medium text-gray-600">Filter:</span>
               <div className="flex items-center space-x-2">
-                <Button variant="outline" size="sm" className="text-xs">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="text-xs"
+                  onClick={() => handleFilterButtonClick('status')}
+                >
                   Semua Status
                 </Button>
-                <Button variant="outline" size="sm" className="text-xs">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="text-xs"
+                  onClick={() => handleFilterButtonClick('location')}
+                >
                   Lokasi
                 </Button>
-                <Button variant="outline" size="sm" className="text-xs">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="text-xs"
+                  onClick={() => handleFilterButtonClick('variety')}
+                >
                   Varietas
                 </Button>
-                <Button variant="outline" size="sm" className="text-xs">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="text-xs"
+                  onClick={() => handleFilterButtonClick('age')}
+                >
                   Umur Pohon
                 </Button>
               </div>
@@ -166,11 +249,14 @@ const Trees = () => {
             
             <div className="flex items-center space-x-2 text-sm text-gray-600">
               <span>Urutkan:</span>
-              <select className="border border-gray-300 rounded px-3 py-1 text-sm">
-                <option>Terbaru</option>
-                <option>Nama A-Z</option>
-                <option>Status Kesehatan</option>
-                <option>Lokasi</option>
+              <select 
+                className="border border-gray-300 rounded px-3 py-1 text-sm cursor-pointer hover:bg-gray-50"
+                onChange={handleSortChange}
+              >
+                <option value="newest">Terbaru</option>
+                <option value="name">Nama A-Z</option>
+                <option value="health">Status Kesehatan</option>
+                <option value="location">Lokasi</option>
               </select>
             </div>
           </div>

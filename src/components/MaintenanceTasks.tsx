@@ -3,10 +3,11 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { maintenanceTasks, trees } from '@/data/mockData';
-import { Calendar, AlertCircle, CheckCircle, Clock, Bell, BellRing } from 'lucide-react';
+import { Calendar, AlertCircle, CheckCircle, Clock, Bell, BellRing, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from "@/hooks/use-toast";
 import { toast } from "sonner";
+import { useNavigate } from 'react-router-dom';
 
 const getTreeName = (treeId: string) => {
   const tree = trees.find(t => t.id === treeId);
@@ -35,17 +36,15 @@ const getStatusIcon = (status: string) => {
 
 const MaintenanceTasks = () => {
   const { toast: toastUI } = useToast();
+  const navigate = useNavigate();
 
   const handleScheduleTask = () => {
-    // Using shadcn toast
-    toastUI({
-      title: "Jadwalkan Tugas",
-      description: "Fitur untuk menjadwalkan tugas baru akan segera hadir!",
-    });
+    // Navigate to trees page to schedule task
+    navigate('/trees');
+    toast.success("Mengarahkan ke halaman pohon untuk menjadwalkan tugas baru");
   };
 
   const handleCompleteTask = (taskId: string) => {
-    // Using sonner toast
     toast.success("Tugas Selesai", {
       description: "Tugas berhasil ditandai sebagai selesai!",
       icon: <CheckCircle className="h-4 w-4" />,
@@ -54,7 +53,6 @@ const MaintenanceTasks = () => {
   };
 
   const handleEditTask = (taskId: string) => {
-    // Using sonner toast with different style
     toast("Edit Tugas", {
       description: `Mengedit tugas dengan ID: ${taskId}`,
       action: {
@@ -65,7 +63,8 @@ const MaintenanceTasks = () => {
   };
   
   const showTaskDetail = (taskId: string) => {
-    // This would normally open a modal or navigate to task detail page
+    // Navigate to analytics page to show task details
+    navigate('/analytics');
     toastUI({
       title: "Detail Tugas",
       description: `Menampilkan detail untuk tugas ${taskId}`,
@@ -77,6 +76,11 @@ const MaintenanceTasks = () => {
       description: `Anda akan diingatkan tentang: ${task.title}`,
       icon: <BellRing className="h-4 w-4 text-cashew-600" />,
     });
+  };
+
+  const handleViewTree = (treeId: string) => {
+    navigate('/trees');
+    toast.success(`Menampilkan pohon: ${getTreeName(treeId)}`);
   };
 
   return (
@@ -100,7 +104,12 @@ const MaintenanceTasks = () => {
                       {task.title}
                       {getStatusIcon(task.status)}
                     </h3>
-                    <p className="text-sm text-muted-foreground mt-1">{getTreeName(task.treeId)}</p>
+                    <button 
+                      onClick={() => handleViewTree(task.treeId)}
+                      className="text-sm text-cashew-600 hover:text-cashew-800 hover:underline mt-1"
+                    >
+                      {getTreeName(task.treeId)}
+                    </button>
                     <p className="text-sm mt-2">{task.description}</p>
                   </div>
                 </div>
@@ -143,6 +152,14 @@ const MaintenanceTasks = () => {
                   onClick={() => handleEditTask(task.id)}
                 >
                   Edit Tugas
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="border-blue-200 hover:bg-blue-50 text-blue-700"
+                  onClick={() => showTaskDetail(task.id)}
+                >
+                  <Eye className="h-4 w-4 mr-1" /> Lihat Detail
                 </Button>
                 <Button 
                   variant="outline" 

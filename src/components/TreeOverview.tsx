@@ -3,32 +3,55 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { trees } from '@/data/mockData';
-import { TreeDeciduous, CalendarCheck, MapPin, Info, MoreVertical } from 'lucide-react';
+import { TreeDeciduous, CalendarCheck, MapPin, Info, MoreVertical, Edit, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
+import { useNavigate } from 'react-router-dom';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 interface TreeOverviewProps {
   viewMode?: 'grid' | 'list';
 }
 
 const TreeOverview = ({ viewMode = 'grid' }: TreeOverviewProps) => {
-  const { toast } = useToast();
+  const { toast: toastUI } = useToast();
+  const navigate = useNavigate();
 
   const handleViewDetails = (treeId: string) => {
-    toast({
-      title: "Detail Pohon",
-      description: `Melihat detail untuk pohon dengan ID: ${treeId}`,
+    navigate('/analytics');
+    toast.success(`Menampilkan detail pohon dengan ID: ${treeId}`);
+  };
+
+  const handleEditTree = (treeId: string, treeName: string) => {
+    navigate('/settings');
+    toast.success(`Mengedit pohon: ${treeName}`);
+  };
+
+  const handleDeleteTree = (treeId: string, treeName: string) => {
+    toast.error(`Menghapus pohon: ${treeName}`, {
+      description: "Fitur hapus akan segera tersedia",
     });
+  };
+
+  const handleLocationClick = (location: string) => {
+    navigate('/weather');
+    toast.success(`Menampilkan cuaca untuk lokasi: ${location}`);
+  };
+
+  const handleMaintenanceClick = (treeId: string) => {
+    navigate('/tasks');
+    toast.success("Menampilkan tugas pemeliharaan untuk pohon ini");
   };
 
   const getHealthBadge = (health: string) => {
     switch (health) {
       case 'healthy':
-        return <Badge className="bg-green-100 text-green-800 hover:bg-green-200">Sehat</Badge>;
+        return <Badge className="bg-green-100 text-green-800 hover:bg-green-200 cursor-pointer">Sehat</Badge>;
       case 'needs-attention':
-        return <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-200">Perlu Perhatian</Badge>;
+        return <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-200 cursor-pointer">Perlu Perhatian</Badge>;
       default:
-        return <Badge className="bg-red-100 text-red-800 hover:bg-red-200">Kritis</Badge>;
+        return <Badge className="bg-red-100 text-red-800 hover:bg-red-200 cursor-pointer">Kritis</Badge>;
     }
   };
 
@@ -46,23 +69,31 @@ const TreeOverview = ({ viewMode = 'grid' }: TreeOverviewProps) => {
                   
                   <div className="flex-1">
                     <div className="flex items-center space-x-3 mb-1">
-                      <h3 className="font-semibold text-gray-800">{tree.name}</h3>
+                      <h3 className="font-semibold text-gray-800 hover:text-cashew-600 cursor-pointer" onClick={() => handleViewDetails(tree.id)}>
+                        {tree.name}
+                      </h3>
                       {getHealthBadge(tree.health)}
                     </div>
                     
                     <div className="flex items-center space-x-6 text-sm text-gray-600">
-                      <div className="flex items-center space-x-1">
+                      <button 
+                        className="flex items-center space-x-1 hover:text-cashew-600 transition-colors"
+                        onClick={() => handleLocationClick(tree.location)}
+                      >
                         <MapPin className="h-4 w-4" />
                         <span>{tree.location}</span>
-                      </div>
+                      </button>
                       <div className="flex items-center space-x-1">
                         <Info className="h-4 w-4" />
                         <span>{tree.variety}</span>
                       </div>
-                      <div className="flex items-center space-x-1">
+                      <button 
+                        className="flex items-center space-x-1 hover:text-cashew-600 transition-colors"
+                        onClick={() => handleMaintenanceClick(tree.id)}
+                      >
                         <CalendarCheck className="h-4 w-4" />
                         <span>{new Date(tree.lastMaintenance).toLocaleDateString('id-ID')}</span>
-                      </div>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -76,9 +107,23 @@ const TreeOverview = ({ viewMode = 'grid' }: TreeOverviewProps) => {
                   >
                     Lihat Detail
                   </Button>
-                  <Button variant="ghost" size="sm">
-                    <MoreVertical className="h-4 w-4" />
-                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm">
+                        <MoreVertical className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem onClick={() => handleEditTree(tree.id, tree.name)}>
+                        <Edit className="h-4 w-4 mr-2" />
+                        Edit Pohon
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleDeleteTree(tree.id, tree.name)} className="text-red-600">
+                        <Trash2 className="h-4 w-4 mr-2" />
+                        Hapus Pohon
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               </div>
             </CardContent>
@@ -98,7 +143,10 @@ const TreeOverview = ({ viewMode = 'grid' }: TreeOverviewProps) => {
                 <div className="p-2 bg-cashew-100 rounded-lg">
                   <TreeDeciduous className="h-5 w-5 text-cashew-600" />
                 </div>
-                <CardTitle className="text-base font-semibold text-gray-800">
+                <CardTitle 
+                  className="text-base font-semibold text-gray-800 hover:text-cashew-600 cursor-pointer transition-colors"
+                  onClick={() => handleViewDetails(tree.id)}
+                >
                   {tree.name}
                 </CardTitle>
               </div>
@@ -109,22 +157,28 @@ const TreeOverview = ({ viewMode = 'grid' }: TreeOverviewProps) => {
           <CardContent className="pt-0">
             <div className="space-y-3">
               <div className="space-y-2">
-                <div className="flex items-center space-x-2 text-sm">
+                <button 
+                  className="flex items-center space-x-2 text-sm hover:text-cashew-600 transition-colors w-full text-left"
+                  onClick={() => handleLocationClick(tree.location)}
+                >
                   <MapPin className="h-4 w-4 text-gray-400" />
                   <span className="text-gray-600">{tree.location}</span>
-                </div>
+                </button>
                 
                 <div className="flex items-center space-x-2 text-sm">
                   <Info className="h-4 w-4 text-gray-400" />
                   <span className="text-gray-600">{tree.variety}</span>
                 </div>
                 
-                <div className="flex items-center space-x-2 text-sm">
+                <button 
+                  className="flex items-center space-x-2 text-sm hover:text-cashew-600 transition-colors w-full text-left"
+                  onClick={() => handleMaintenanceClick(tree.id)}
+                >
                   <CalendarCheck className="h-4 w-4 text-gray-400" />
                   <span className="text-gray-600">
                     {new Date(tree.lastMaintenance).toLocaleDateString('id-ID')}
                   </span>
-                </div>
+                </button>
               </div>
               
               {tree.notes && (
@@ -142,9 +196,23 @@ const TreeOverview = ({ viewMode = 'grid' }: TreeOverviewProps) => {
                 >
                   Lihat Detail
                 </Button>
-                <Button variant="ghost" size="sm" className="px-2">
-                  <MoreVertical className="h-4 w-4" />
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm" className="px-2">
+                      <MoreVertical className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem onClick={() => handleEditTree(tree.id, tree.name)}>
+                      <Edit className="h-4 w-4 mr-2" />
+                      Edit
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleDeleteTree(tree.id, tree.name)} className="text-red-600">
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      Hapus
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
           </CardContent>

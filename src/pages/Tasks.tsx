@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter, DrawerClose } from "@/components/ui/drawer";
+import { useNavigate } from 'react-router-dom';
 
 const Tasks = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -19,6 +20,7 @@ const Tasks = () => {
   const [showNotificationDialog, setShowNotificationDialog] = useState(false);
   const [showNotificationDrawer, setShowNotificationDrawer] = useState(false);
   const [hasNewNotifications, setHasNewNotifications] = useState(false);
+  const navigate = useNavigate();
 
   // Simulate receiving a notification after component loads
   useEffect(() => {
@@ -37,7 +39,8 @@ const Tasks = () => {
   }, [notificationsEnabled]);
 
   const handleAddTask = () => {
-    toast.info('Fitur tambah tugas akan segera tersedia');
+    navigate('/trees');
+    toast.success('Mengarahkan ke halaman pohon untuk menambah tugas baru');
   };
 
   const handleFilter = () => {
@@ -52,7 +55,8 @@ const Tasks = () => {
   };
 
   const handleCalendarView = () => {
-    toast.info('Fitur tampilan kalender akan segera tersedia');
+    navigate('/analytics');
+    toast.success('Menampilkan tampilan kalender di halaman analitik');
   };
   
   const toggleNotifications = () => {
@@ -76,10 +80,32 @@ const Tasks = () => {
   };
   
   const sendMessage = () => {
-    toast("Pesan Terkirim", {
-      description: "Pesan telah berhasil dikirim ke tim",
+    navigate('/settings');
+    toast("Mengarahkan ke pengaturan", {
+      description: "Halaman pengaturan untuk mengirim pesan",
       icon: <MessageCircle className="h-4 w-4" />,
     });
+  };
+
+  const handleStatClick = (statType: string) => {
+    switch(statType) {
+      case 'pending':
+        navigate('/trees');
+        toast.success('Menampilkan tugas yang menunggu');
+        break;
+      case 'in-progress':
+        navigate('/analytics');
+        toast.success('Menampilkan tugas dalam proses');
+        break;
+      case 'completed':
+        navigate('/analytics');
+        toast.success('Menampilkan tugas yang selesai');
+        break;
+      case 'overdue':
+        navigate('/weather');
+        toast.success('Menampilkan tugas yang terlambat');
+        break;
+    }
   };
 
   return (
@@ -153,7 +179,10 @@ const Tasks = () => {
 
       {/* Quick Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-        <Card className="border-cashew-100 hover:shadow-md transition-shadow">
+        <Card 
+          className="border-cashew-100 hover:shadow-md transition-shadow cursor-pointer"
+          onClick={() => handleStatClick('pending')}
+        >
           <CardContent className="p-4">
             <div className="flex items-center space-x-3">
               <div className="p-2 bg-amber-100 rounded-full">
@@ -167,7 +196,10 @@ const Tasks = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-cashew-100 hover:shadow-md transition-shadow">
+        <Card 
+          className="border-cashew-100 hover:shadow-md transition-shadow cursor-pointer"
+          onClick={() => handleStatClick('in-progress')}
+        >
           <CardContent className="p-4">
             <div className="flex items-center space-x-3">
               <div className="p-2 bg-blue-100 rounded-full">
@@ -181,7 +213,10 @@ const Tasks = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-cashew-100 hover:shadow-md transition-shadow">
+        <Card 
+          className="border-cashew-100 hover:shadow-md transition-shadow cursor-pointer"
+          onClick={() => handleStatClick('completed')}
+        >
           <CardContent className="p-4">
             <div className="flex items-center space-x-3">
               <div className="p-2 bg-green-100 rounded-full">
@@ -195,7 +230,10 @@ const Tasks = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-cashew-100 hover:shadow-md transition-shadow">
+        <Card 
+          className="border-cashew-100 hover:shadow-md transition-shadow cursor-pointer"
+          onClick={() => handleStatClick('overdue')}
+        >
           <CardContent className="p-4">
             <div className="flex items-center space-x-3">
               <div className="p-2 bg-red-100 rounded-full">
