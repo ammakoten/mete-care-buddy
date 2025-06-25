@@ -1,5 +1,5 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,6 +15,8 @@ import HelpSupport from '@/components/HelpSupport';
 
 const Settings = () => {
   const { user } = useAuth();
+  const [searchParams] = useSearchParams();
+  const [activeTab, setActiveTab] = useState('profile');
   const [name, setName] = useState(user?.name || '');
   const [email, setEmail] = useState(user?.email || '');
   const [notifications, setNotifications] = useState({
@@ -23,6 +25,14 @@ const Settings = () => {
     maintenance: true,
     weather: false
   });
+
+  // Set active tab based on URL parameter
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab) {
+      setActiveTab(tab);
+    }
+  }, [searchParams]);
 
   const handleProfileSave = (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,7 +67,7 @@ const Settings = () => {
           {/* Sidebar Navigation */}
           <aside className="lg:col-span-3">
             <nav className="space-y-1">
-              <Tabs defaultValue="profile" orientation="vertical" className="flex flex-col lg:flex-row gap-6">
+              <Tabs value={activeTab} onValueChange={setActiveTab} orientation="vertical" className="flex flex-col lg:flex-row gap-6">
                 <TabsList className="lg:flex-col lg:h-auto lg:w-full bg-white border border-gray-200 p-1">
                   <TabsTrigger 
                     value="profile" 

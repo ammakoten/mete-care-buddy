@@ -129,7 +129,7 @@ const AppSidebar = ({ collapsed, toggleSidebar }: SidebarProps) => {
           {collapsed ? "•••" : "Pengaturan"}
         </div>
         <SidebarItem icon={Settings} label="Pengaturan" to="/settings" collapsed={collapsed} />
-        <SidebarItem icon={HelpCircle} label="Bantuan" to="#" collapsed={collapsed} />
+        <SidebarItem icon={HelpCircle} label="Bantuan" to="/settings?tab=help" collapsed={collapsed} />
       </div>
     </aside>
   );
