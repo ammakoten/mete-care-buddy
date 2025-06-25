@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Bell, LogOut, Search, Settings, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -22,7 +21,8 @@ const AppHeader = () => {
       message: 'Ada tugas pemupukan yang perlu diselesaikan hari ini',
       time: '5 menit lalu',
       read: false,
-      type: 'task'
+      type: 'task',
+      targetPage: '/tasks'
     },
     {
       id: 2,
@@ -30,7 +30,8 @@ const AppHeader = () => {
       message: 'Pohon #JM-001 menunjukkan gejala yang perlu diperiksa',
       time: '1 jam lalu',
       read: false,
-      type: 'alert'
+      type: 'alert',
+      targetPage: '/trees'
     },
     {
       id: 3,
@@ -38,7 +39,8 @@ const AppHeader = () => {
       message: 'Laporan pemeliharaan minggu ini telah tersedia',
       time: '2 jam lalu',
       read: true,
-      type: 'report'
+      type: 'report',
+      targetPage: '/analytics'
     }
   ]);
 
@@ -56,19 +58,27 @@ const AppHeader = () => {
     }
   };
 
-  const handleNotificationClick = (notificationId: number) => {
+  const handleNotificationClick = (notification: any) => {
+    // Mark notification as read
     setNotifications(prev => 
       prev.map(notif => 
-        notif.id === notificationId 
+        notif.id === notification.id 
           ? { ...notif, read: true }
           : notif
       )
     );
     
-    const unreadCount = notifications.filter(n => !n.read && n.id !== notificationId).length;
+    // Update notification count
+    const unreadCount = notifications.filter(n => !n.read && n.id !== notification.id).length;
     setNotificationCount(unreadCount);
     
-    toast.success('Notifikasi dibaca');
+    // Navigate to the target page
+    navigate(notification.targetPage);
+    
+    // Show success toast with notification details
+    toast.success(`Membuka: ${notification.title}`, {
+      description: notification.message,
+    });
   };
 
   const markAllAsRead = () => {
@@ -169,7 +179,7 @@ const AppHeader = () => {
                         {notifications.map((notification) => (
                           <div
                             key={notification.id}
-                            onClick={() => handleNotificationClick(notification.id)}
+                            onClick={() => handleNotificationClick(notification)}
                             className={`p-4 cursor-pointer transition-colors hover:bg-cashew-50 border-b border-cashew-50 last:border-b-0 ${
                               !notification.read ? 'bg-cashew-25 border-l-4 border-l-cashew-500' : ''
                             }`}
