@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -8,10 +7,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Plus } from 'lucide-react';
 import { useTreeContext } from '@/contexts/TreeContext';
+import { useTaskContext } from '@/contexts/TaskContext';
 import { toast } from 'sonner';
 
 const AddTreeDialog = () => {
   const { addTree } = useTreeContext();
+  const { generateTasksForTree } = useTaskContext();
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -30,6 +31,9 @@ const AddTreeDialog = () => {
       return;
     }
 
+    const treeId = Date.now().toString();
+    
+    // Add tree first
     addTree({
       name: formData.name,
       age: parseInt(formData.age),
@@ -38,9 +42,16 @@ const AddTreeDialog = () => {
       location: formData.location,
       notes: formData.notes,
       lastMaintenance: new Date().toISOString().split('T')[0]
-    });
+    }, false);
 
-    toast.success('Pohon berhasil ditambahkan!');
+    // Generate tasks for the new tree
+    setTimeout(() => {
+      generateTasksForTree(treeId);
+      toast.success('Pohon berhasil ditambahkan dengan jadwal pemeliharaan otomatis!', {
+        description: 'Tugas pemeliharaan telah dijadwalkan secara otomatis'
+      });
+    }, 100);
+
     setOpen(false);
     setFormData({
       name: '',

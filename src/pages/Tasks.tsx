@@ -12,6 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter, DrawerClose } from "@/components/ui/drawer";
 import { useNavigate } from 'react-router-dom';
+import { useTaskContext } from '@/contexts/TaskContext';
 
 const Tasks = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -21,6 +22,17 @@ const Tasks = () => {
   const [showNotificationDrawer, setShowNotificationDrawer] = useState(false);
   const [hasNewNotifications, setHasNewNotifications] = useState(false);
   const navigate = useNavigate();
+  const { tasks } = useTaskContext();
+
+  // Calculate task statistics
+  const pendingTasks = tasks.filter(task => task.status === 'pending').length;
+  const inProgressTasks = tasks.filter(task => task.status === 'in-progress').length;
+  const completedTasks = tasks.filter(task => task.status === 'completed').length;
+  const overdueTasks = tasks.filter(task => {
+    const today = new Date();
+    const dueDate = new Date(task.dueDate);
+    return dueDate < today && task.status !== 'completed';
+  }).length;
 
   // Simulate receiving a notification after component loads
   useEffect(() => {
@@ -120,7 +132,7 @@ const Tasks = () => {
                 Jadwalkan dan lacak tugas pemeliharaan untuk pohon jambu mete Anda
               </p>
               <p className="text-sm text-cashew-600 mt-2">
-                8 tugas aktif | 3 tugas menunggu persetujuan
+                {tasks.length} tugas total | {pendingTasks} tugas menunggu persetujuan
               </p>
             </div>
             
@@ -190,7 +202,7 @@ const Tasks = () => {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Tugas Menunggu</p>
-                <p className="text-2xl font-bold text-amber-600">3</p>
+                <p className="text-2xl font-bold text-amber-600">{pendingTasks}</p>
               </div>
             </div>
           </CardContent>
@@ -207,7 +219,7 @@ const Tasks = () => {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Dalam Proses</p>
-                <p className="text-2xl font-bold text-blue-600">5</p>
+                <p className="text-2xl font-bold text-blue-600">{inProgressTasks}</p>
               </div>
             </div>
           </CardContent>
@@ -224,7 +236,7 @@ const Tasks = () => {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Selesai Hari Ini</p>
-                <p className="text-2xl font-bold text-green-600">2</p>
+                <p className="text-2xl font-bold text-green-600">{completedTasks}</p>
               </div>
             </div>
           </CardContent>
@@ -241,7 +253,7 @@ const Tasks = () => {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Terlambat</p>
-                <p className="text-2xl font-bold text-red-600">1</p>
+                <p className="text-2xl font-bold text-red-600">{overdueTasks}</p>
               </div>
             </div>
           </CardContent>

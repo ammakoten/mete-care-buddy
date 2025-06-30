@@ -5,8 +5,18 @@ import TreeOverview from '@/components/TreeOverview';
 import MaintenanceTasks from '@/components/MaintenanceTasks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { TreeDeciduous, CalendarCheck, TrendingUp, Users } from 'lucide-react';
+import { useTreeContext } from '@/contexts/TreeContext';
+import { useTaskContext } from '@/contexts/TaskContext';
+import { useAnalyticsContext } from '@/contexts/AnalyticsContext';
 
 const Dashboard = () => {
+  const { trees } = useTreeContext();
+  const { tasks } = useTaskContext();
+  const { getAnalyticsData } = useAnalyticsContext();
+  
+  const analyticsData = getAnalyticsData();
+  const activeTasks = tasks.filter(task => task.status !== 'completed').length;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-cashew-50 to-white">
       {/* Header Section */}
@@ -31,12 +41,12 @@ const Dashboard = () => {
             </div>
             <div className="hidden md:flex items-center space-x-4">
               <div className="text-center">
-                <div className="text-2xl font-bold text-cashew-800">47</div>
+                <div className="text-2xl font-bold text-cashew-800">{analyticsData.totalTrees}</div>
                 <div className="text-sm text-muted-foreground">Total Pohon</div>
               </div>
               <div className="w-px h-12 bg-cashew-200"></div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-green-600">89%</div>
+                <div className="text-2xl font-bold text-green-600">{analyticsData.productivity}%</div>
                 <div className="text-sm text-muted-foreground">Kesehatan</div>
               </div>
             </div>
@@ -54,7 +64,7 @@ const Dashboard = () => {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Pohon Sehat</p>
-                <p className="text-2xl font-bold text-green-600">42</p>
+                <p className="text-2xl font-bold text-green-600">{analyticsData.healthyTrees}</p>
               </div>
             </div>
           </CardContent>
@@ -68,7 +78,7 @@ const Dashboard = () => {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Tugas Aktif</p>
-                <p className="text-2xl font-bold text-amber-600">8</p>
+                <p className="text-2xl font-bold text-amber-600">{activeTasks}</p>
               </div>
             </div>
           </CardContent>
@@ -82,7 +92,7 @@ const Dashboard = () => {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Produktivitas</p>
-                <p className="text-2xl font-bold text-blue-600">+12%</p>
+                <p className="text-2xl font-bold text-blue-600">+{analyticsData.productivity}%</p>
               </div>
             </div>
           </CardContent>
@@ -95,8 +105,8 @@ const Dashboard = () => {
                 <Users className="h-6 w-6 text-purple-600" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Tim Aktif</p>
-                <p className="text-2xl font-bold text-purple-600">5</p>
+                <p className="text-sm text-muted-foreground">Total Tugas</p>
+                <p className="text-2xl font-bold text-purple-600">{tasks.length}</p>
               </div>
             </div>
           </CardContent>
@@ -124,7 +134,7 @@ const Dashboard = () => {
               Pemeliharaan Terbaru
             </h2>
             <div className="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm font-medium">
-              8 Aktif
+              {activeTasks} Aktif
             </div>
           </div>
           <MaintenanceTasks />
@@ -138,7 +148,7 @@ const Dashboard = () => {
               Status Pohon
             </h2>
             <div className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
-              47 Total
+              {analyticsData.totalTrees} Total
             </div>
           </div>
           <TreeOverview />

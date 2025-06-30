@@ -18,6 +18,9 @@ import Register from "./pages/Register";
 import CombinedFile from "./pages/CombinedFile";
 import { AuthProvider } from "./contexts/AuthContext";
 import { TreeProvider } from "./contexts/TreeContext";
+import { TaskProvider } from "./contexts/TaskContext";
+import { WeatherProvider } from "./contexts/WeatherContext";
+import { AnalyticsProvider } from "./contexts/AnalyticsContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
@@ -26,34 +29,40 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <TreeProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              {/* Public routes */}
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/combined" element={<CombinedFile />} />
-              
-              {/* Protected routes */}
-              <Route element={<ProtectedRoute />}>
-                <Route path="/" element={<AppLayout />}>
-                  <Route index element={<Dashboard />} />
-                  <Route path="trees" element={<Trees />} />
-                  <Route path="tasks" element={<Tasks />} />
-                  <Route path="weather" element={<Weather />} />
-                  <Route path="analytics" element={<Analytics />} />
-                  <Route path="settings" element={<Settings />} />
-                </Route>
-              </Route>
-              
-              {/* Fallback routes */}
-              <Route path="/index" element={<Navigate to="/" replace />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
+        <TaskProvider>
+          <WeatherProvider>
+            <AnalyticsProvider>
+              <TooltipProvider>
+                <Toaster />
+                <Sonner />
+                <BrowserRouter>
+                  <Routes>
+                    {/* Public routes */}
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/combined" element={<CombinedFile />} />
+                    
+                    {/* Protected routes */}
+                    <Route element={<ProtectedRoute />}>
+                      <Route path="/" element={<AppLayout />}>
+                        <Route index element={<Dashboard />} />
+                        <Route path="trees" element={<Trees />} />
+                        <Route path="tasks" element={<Tasks />} />
+                        <Route path="weather" element={<Weather />} />
+                        <Route path="analytics" element={<Analytics />} />
+                        <Route path="settings" element={<Settings />} />
+                      </Route>
+                    </Route>
+                    
+                    {/* Fallback routes */}
+                    <Route path="/index" element={<Navigate to="/" replace />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </BrowserRouter>
+              </TooltipProvider>
+            </AnalyticsProvider>
+          </WeatherProvider>
+        </TaskProvider>
       </TreeProvider>
     </AuthProvider>
   </QueryClientProvider>

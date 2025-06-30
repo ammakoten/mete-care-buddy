@@ -14,7 +14,7 @@ export interface TreeData {
 
 interface TreeContextType {
   trees: TreeData[];
-  addTree: (tree: Omit<TreeData, 'id'>) => void;
+  addTree: (tree: Omit<TreeData, 'id'>, generateTasks?: boolean) => void;
   updateTree: (id: string, tree: Partial<TreeData>) => void;
   deleteTree: (id: string) => void;
   getTreeById: (id: string) => TreeData | undefined;
@@ -35,15 +35,21 @@ interface TreeProviderProps {
 }
 
 export const TreeProvider = ({ children }: TreeProviderProps) => {
-  // Mulai dengan array kosong atau beberapa data contoh
   const [trees, setTrees] = useState<TreeData[]>([]);
 
-  const addTree = (newTree: Omit<TreeData, 'id'>) => {
+  const addTree = (newTree: Omit<TreeData, 'id'>, generateTasks: boolean = true) => {
     const tree: TreeData = {
       ...newTree,
-      id: Date.now().toString(), // Simple ID generation
+      id: Date.now().toString(),
     };
     setTrees(prev => [...prev, tree]);
+    
+    // Trigger task generation event
+    if (generateTasks) {
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent('treeAdded', { detail: { treeId: tree.id } }));
+      }, 100);
+    }
   };
 
   const updateTree = (id: string, updatedTree: Partial<TreeData>) => {
@@ -56,6 +62,8 @@ export const TreeProvider = ({ children }: TreeProviderProps) => {
 
   const deleteTree = (id: string) => {
     setTrees(prev => prev.filter(tree => tree.id !== id));
+    // Trigger task cleanup event
+    window.dispatchEvent(new CustomEvent('treeDeleted', { detail: { treeId: id } }));
   };
 
   const getTreeById = (id: string) => {
