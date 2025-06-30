@@ -3,19 +3,23 @@ import React from 'react';
 import { TreeDeciduous, CalendarCheck, CloudSun } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { trees, maintenanceTasks } from '@/data/mockData';
+import { useTreeContext } from '@/contexts/TreeContext';
+import { useTaskContext } from '@/contexts/TaskContext';
 
 const DashboardOverview = () => {
+  const { trees } = useTreeContext();
+  const { tasks } = useTaskContext();
+
   const healthyTrees = trees.filter(tree => tree.health === 'healthy').length;
   const needsAttentionTrees = trees.filter(tree => tree.health === 'needs-attention').length;
   const criticalTrees = trees.filter(tree => tree.health === 'critical').length;
   
-  const pendingTasks = maintenanceTasks.filter(task => task.status === 'pending').length;
-  const inProgressTasks = maintenanceTasks.filter(task => task.status === 'in-progress').length;
-  const completedTasks = maintenanceTasks.filter(task => task.status === 'completed').length;
+  const pendingTasks = tasks.filter(task => task.status === 'pending').length;
+  const inProgressTasks = tasks.filter(task => task.status === 'in-progress').length;
+  const completedTasks = tasks.filter(task => task.status === 'completed').length;
   
   const totalTrees = trees.length;
-  const totalTasks = maintenanceTasks.length;
+  const totalTasks = tasks.length;
   
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -28,31 +32,37 @@ const DashboardOverview = () => {
           <CardDescription>Status kesehatan pohon jambu mete Anda</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            <div className="space-y-1">
-              <div className="flex justify-between text-sm">
-                <span>Sehat</span>
-                <span className="font-medium">{healthyTrees} pohon</span>
-              </div>
-              <Progress value={(healthyTrees / totalTrees) * 100} className="h-2 bg-gray-100" />
+          {totalTrees === 0 ? (
+            <div className="text-center py-4">
+              <p className="text-sm text-muted-foreground">Belum ada pohon yang ditambahkan</p>
             </div>
-            
-            <div className="space-y-1">
-              <div className="flex justify-between text-sm">
-                <span>Perlu Perhatian</span>
-                <span className="font-medium">{needsAttentionTrees} pohon</span>
+          ) : (
+            <div className="space-y-4">
+              <div className="space-y-1">
+                <div className="flex justify-between text-sm">
+                  <span>Sehat</span>
+                  <span className="font-medium">{healthyTrees} pohon</span>
+                </div>
+                <Progress value={(healthyTrees / totalTrees) * 100} className="h-2 bg-gray-100" />
               </div>
-              <Progress value={(needsAttentionTrees / totalTrees) * 100} className="h-2 bg-gray-100" />
-            </div>
-            
-            <div className="space-y-1">
-              <div className="flex justify-between text-sm">
-                <span>Kritis</span>
-                <span className="font-medium">{criticalTrees} pohon</span>
+              
+              <div className="space-y-1">
+                <div className="flex justify-between text-sm">
+                  <span>Perlu Perhatian</span>
+                  <span className="font-medium">{needsAttentionTrees} pohon</span>
+                </div>
+                <Progress value={(needsAttentionTrees / totalTrees) * 100} className="h-2 bg-gray-100" />
               </div>
-              <Progress value={(criticalTrees / totalTrees) * 100} className="h-2 bg-gray-100" />
+              
+              <div className="space-y-1">
+                <div className="flex justify-between text-sm">
+                  <span>Kritis</span>
+                  <span className="font-medium">{criticalTrees} pohon</span>
+                </div>
+                <Progress value={(criticalTrees / totalTrees) * 100} className="h-2 bg-gray-100" />
+              </div>
             </div>
-          </div>
+          )}
         </CardContent>
       </Card>
       
@@ -65,31 +75,37 @@ const DashboardOverview = () => {
           <CardDescription>Status tugas pemeliharaan saat ini</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            <div className="space-y-1">
-              <div className="flex justify-between text-sm">
-                <span>Tertunda</span>
-                <span className="font-medium">{pendingTasks} tugas</span>
-              </div>
-              <Progress value={(pendingTasks / totalTasks) * 100} className="h-2 bg-gray-100" />
+          {totalTasks === 0 ? (
+            <div className="text-center py-4">
+              <p className="text-sm text-muted-foreground">Belum ada tugas pemeliharaan</p>
             </div>
-            
-            <div className="space-y-1">
-              <div className="flex justify-between text-sm">
-                <span>Dalam Proses</span>
-                <span className="font-medium">{inProgressTasks} tugas</span>
+          ) : (
+            <div className="space-y-4">
+              <div className="space-y-1">
+                <div className="flex justify-between text-sm">
+                  <span>Tertunda</span>
+                  <span className="font-medium">{pendingTasks} tugas</span>
+                </div>
+                <Progress value={(pendingTasks / totalTasks) * 100} className="h-2 bg-gray-100" />
               </div>
-              <Progress value={(inProgressTasks / totalTasks) * 100} className="h-2 bg-gray-100" />
-            </div>
-            
-            <div className="space-y-1">
-              <div className="flex justify-between text-sm">
-                <span>Selesai</span>
-                <span className="font-medium">{completedTasks} tugas</span>
+              
+              <div className="space-y-1">
+                <div className="flex justify-between text-sm">
+                  <span>Dalam Proses</span>
+                  <span className="font-medium">{inProgressTasks} tugas</span>
+                </div>
+                <Progress value={(inProgressTasks / totalTasks) * 100} className="h-2 bg-gray-100" />
               </div>
-              <Progress value={(completedTasks / totalTasks) * 100} className="h-2 bg-gray-100" />
+              
+              <div className="space-y-1">
+                <div className="flex justify-between text-sm">
+                  <span>Selesai</span>
+                  <span className="font-medium">{completedTasks} tugas</span>
+                </div>
+                <Progress value={(completedTasks / totalTasks) * 100} className="h-2 bg-gray-100" />
+              </div>
             </div>
-          </div>
+          )}
         </CardContent>
       </Card>
       
