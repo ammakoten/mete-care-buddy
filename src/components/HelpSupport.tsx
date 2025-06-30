@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { 
   HelpCircle, 
@@ -20,11 +21,15 @@ import {
   Users,
   FileText,
   Video,
-  Download
+  Download,
+  MessageSquare,
+  BookOpen,
+  HeadphonesIcon
 } from 'lucide-react';
 import { toast } from 'sonner';
 
 const HelpSupport = () => {
+  const [activeTab, setActiveTab] = useState('faq');
   const [supportMessage, setSupportMessage] = useState('');
   const [userEmail, setUserEmail] = useState('');
 
@@ -105,217 +110,290 @@ const HelpSupport = () => {
   ];
 
   return (
-    <div className="space-y-8">
-      {/* Header Section */}
-      <div className="text-center bg-gradient-to-r from-cashew-50 to-white rounded-2xl p-8 border border-cashew-200">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-cashew-100 rounded-full mb-4">
-          <HelpCircle className="h-8 w-8 text-cashew-600" />
-        </div>
-        <h1 className="text-2xl font-bold text-cashew-800 mb-2">
-          Pusat Bantuan & Dukungan
-        </h1>
-        <p className="text-cashew-600 max-w-2xl mx-auto">
-          Temukan jawaban atas pertanyaan Anda, akses panduan lengkap, atau hubungi tim support kami untuk bantuan lebih lanjut
-        </p>
-      </div>
-
-      {/* Quick Access Cards */}
-      <div className="grid gap-6 md:grid-cols-2">
-        <Card className="shadow-lg border-cashew-200 bg-white/95 backdrop-blur-sm hover:shadow-xl transition-all duration-300">
-          <CardHeader className="pb-4 bg-gradient-to-r from-cashew-50 to-white border-b border-cashew-100">
-            <CardTitle className="flex items-center text-lg">
-              <Book className="mr-3 h-6 w-6 text-cashew-600" />
-              Sumber Daya
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="pt-6">
-            <div className="space-y-3">
-              {resourceLinks.map((resource, index) => (
-                <Button 
-                  key={index}
-                  onClick={() => toast.success(`Mengunduh ${resource.title}...`)}
-                  variant="outline" 
-                  className="w-full flex items-center justify-between p-4 h-auto border-cashew-200 hover:bg-cashew-50 hover:border-cashew-300 transition-all"
-                >
-                  <div className="flex items-center">
-                    <resource.icon className="mr-3 h-5 w-5 text-cashew-600" />
-                    <span className="font-medium text-cashew-800">{resource.title}</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-xs bg-cashew-100 text-cashew-700 px-2 py-1 rounded-full">
-                      {resource.type}
-                    </span>
-                    <Download className="h-4 w-4 text-cashew-400" />
-                  </div>
-                </Button>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="shadow-lg border-cashew-200 bg-white/95 backdrop-blur-sm hover:shadow-xl transition-all duration-300">
-          <CardHeader className="pb-4 bg-gradient-to-r from-cashew-50 to-white border-b border-cashew-100">
-            <CardTitle className="flex items-center text-lg">
-              <Phone className="mr-3 h-6 w-6 text-cashew-600" />
-              Kontak Langsung
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="pt-6">
-            <div className="space-y-4">
-              <Button 
-                onClick={() => toast.success('Menghubungi: +62-800-1234-5678')}
-                className="w-full bg-cashew-600 hover:bg-cashew-700 text-white py-3"
-              >
-                <Phone className="mr-2 h-4 w-4" />
-                Telepon Support (24/7)
-              </Button>
-              
-              <Button 
-                onClick={() => toast.success('Membuka email: support@jambumete.com')}
-                variant="outline"
-                className="w-full border-cashew-300 hover:bg-cashew-50 py-3"
-              >
-                <Mail className="mr-2 h-4 w-4" />
-                Email Support
-              </Button>
-
-              <div className="text-center text-xs text-cashew-500 mt-4 p-3 bg-cashew-25 rounded-lg">
-                <p>Tim support tersedia 24/7</p>
-                <p>Waktu respon rata-rata: 1-4 jam</p>
+    <div className="min-h-screen bg-gradient-to-br from-cashew-25 via-white to-cashew-50">
+      {/* Header */}
+      <div className="bg-white/95 backdrop-blur-sm border-b border-cashew-200 shadow-sm">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="py-6">
+            <div className="text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-cashew-100 rounded-full mb-4">
+                <HelpCircle className="h-8 w-8 text-cashew-600" />
               </div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-cashew-800 mb-2">
+                Pusat Bantuan & Dukungan
+              </h1>
+              <p className="text-sm text-cashew-600 max-w-2xl mx-auto">
+                Temukan jawaban atas pertanyaan Anda, akses panduan lengkap, atau hubungi tim support kami
+              </p>
             </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Quick Guides Section */}
-      <Card className="shadow-lg border-cashew-200 bg-white/95 backdrop-blur-sm">
-        <CardHeader className="pb-4 bg-gradient-to-r from-cashew-50 to-white border-b border-cashew-100">
-          <CardTitle className="text-xl text-cashew-800">Panduan Cepat</CardTitle>
-          <p className="text-sm text-cashew-600 mt-1">
-            Panduan singkat untuk fitur-fitur utama aplikasi
-          </p>
-        </CardHeader>
-        <CardContent className="pt-6">
-          <div className="grid gap-6 md:grid-cols-2">
-            {quickGuides.map((guide, index) => (
-              <div 
-                key={index} 
-                className={`bg-gradient-to-r ${guide.color} border border-cashew-200 rounded-xl p-6 hover:shadow-lg transition-all duration-300 cursor-pointer`}
-                onClick={() => toast.success(`Membuka panduan ${guide.title}...`)}
-              >
-                <div className="flex items-start space-x-4">
-                  <div className={`${guide.iconBg} p-3 rounded-xl shadow-sm`}>
-                    <guide.icon className={`h-6 w-6 ${guide.iconColor}`} />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-semibold text-gray-800 mb-2">{guide.title}</h4>
-                    <p className="text-sm text-gray-600 mb-3">{guide.description}</p>
-                    <div className="flex items-center text-xs text-gray-500">
-                      <ExternalLink className="h-3 w-3 mr-1" />
-                      Buka Panduan
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
-      {/* FAQ Section */}
-      <Card className="shadow-lg border-cashew-200 bg-white/95 backdrop-blur-sm">
-        <CardHeader className="pb-4 bg-gradient-to-r from-cashew-50 to-white border-b border-cashew-100">
-          <CardTitle className="text-xl text-cashew-800 flex items-center">
-            <MessageCircle className="h-5 w-5 mr-3 text-cashew-600" />
-            Pertanyaan yang Sering Ditanyakan
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="pt-6">
-          <Accordion type="single" collapsible className="w-full space-y-4">
-            {faqData.map((faq, index) => (
-              <AccordionItem 
-                key={index} 
-                value={`item-${index}`} 
-                className="border border-cashew-200 rounded-xl px-6 py-2 bg-gradient-to-r from-white to-cashew-25 hover:shadow-md transition-all"
-              >
-                <AccordionTrigger className="text-left hover:text-cashew-700 py-4 hover:no-underline">
-                  <span className="font-medium text-cashew-800 pr-4">{faq.question}</span>
-                </AccordionTrigger>
-                <AccordionContent className="text-cashew-600 pb-4 pt-2 leading-relaxed">
-                  {faq.answer}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </CardContent>
-      </Card>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col lg:flex-row gap-8">
+          {/* Navigation Sidebar */}
+          <div className="lg:w-72">
+            <Card className="shadow-lg border-cashew-200 bg-white/90 backdrop-blur-sm sticky top-8">
+              <CardHeader className="pb-4 border-b border-cashew-100">
+                <h3 className="text-lg font-semibold text-cashew-800">Menu Bantuan</h3>
+              </CardHeader>
+              <CardContent className="p-0">
+                <TabsList className="flex flex-col h-auto w-full bg-transparent p-2 space-y-1">
+                  <TabsTrigger 
+                    value="faq" 
+                    className="w-full justify-start px-4 py-3 text-left text-sm data-[state=active]:bg-cashew-100 data-[state=active]:text-cashew-800 data-[state=active]:border-cashew-300 rounded-lg border border-transparent hover:bg-cashew-50 transition-all"
+                  >
+                    <MessageSquare className="h-4 w-4 mr-3" />
+                    FAQ
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="guides"
+                    className="w-full justify-start px-4 py-3 text-left text-sm data-[state=active]:bg-cashew-100 data-[state=active]:text-cashew-800 data-[state=active]:border-cashew-300 rounded-lg border border-transparent hover:bg-cashew-50 transition-all"
+                  >
+                    <BookOpen className="h-4 w-4 mr-3" />
+                    Panduan Cepat
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="resources"
+                    className="w-full justify-start px-4 py-3 text-left text-sm data-[state=active]:bg-cashew-100 data-[state=active]:text-cashew-800 data-[state=active]:border-cashew-300 rounded-lg border border-transparent hover:bg-cashew-50 transition-all"
+                  >
+                    <Book className="h-4 w-4 mr-3" />
+                    Sumber Daya
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="contact"
+                    className="w-full justify-start px-4 py-3 text-left text-sm data-[state=active]:bg-cashew-100 data-[state=active]:text-cashew-800 data-[state=active]:border-cashew-300 rounded-lg border border-transparent hover:bg-cashew-50 transition-all"
+                  >
+                    <HeadphonesIcon className="h-4 w-4 mr-3" />
+                    Hubungi Kami
+                  </TabsTrigger>
+                </TabsList>
+              </CardContent>
+            </Card>
+          </div>
 
-      {/* Contact Form Section */}
-      <Card className="shadow-lg border-cashew-200 bg-white/95 backdrop-blur-sm">
-        <CardHeader className="pb-4 bg-gradient-to-r from-cashew-50 to-white border-b border-cashew-100">
-          <CardTitle className="text-xl text-cashew-800 flex items-center">
-            <Users className="h-5 w-5 mr-3 text-cashew-600" />
-            Kirim Pesan Bantuan
-          </CardTitle>
-          <p className="text-sm text-cashew-600 mt-1">
-            Butuh bantuan lebih lanjut? Kirimkan pesan Anda dan tim support akan merespons segera
-          </p>
-        </CardHeader>
-        <CardContent className="pt-6">
-          <form onSubmit={handleSendSupport} className="space-y-6">
-            <div className="grid gap-6 md:grid-cols-2">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-cashew-700">
-                  Email Anda *
-                </label>
-                <Input 
-                  type="email"
-                  value={userEmail}
-                  onChange={(e) => setUserEmail(e.target.value)}
-                  placeholder="email@example.com"
-                  className="border-cashew-200 focus:border-cashew-400 focus:ring-cashew-400"
-                  required
-                />
+          {/* Main Content */}
+          <div className="flex-1">
+            {/* FAQ Tab */}
+            <TabsContent value="faq" className="mt-0">
+              <Card className="shadow-lg border-cashew-200 bg-white/95 backdrop-blur-sm">
+                <CardHeader className="border-b border-cashew-100 bg-gradient-to-r from-cashew-50 to-white">
+                  <CardTitle className="text-xl text-cashew-800 flex items-center">
+                    <MessageCircle className="h-5 w-5 mr-3 text-cashew-600" />
+                    Pertanyaan yang Sering Ditanyakan
+                  </CardTitle>
+                  <p className="text-sm text-cashew-600 mt-1">
+                    Temukan jawaban untuk pertanyaan umum tentang aplikasi
+                  </p>
+                </CardHeader>
+                <CardContent className="pt-6">
+                  <Accordion type="single" collapsible className="w-full space-y-4">
+                    {faqData.map((faq, index) => (
+                      <AccordionItem 
+                        key={index} 
+                        value={`item-${index}`} 
+                        className="border border-cashew-200 rounded-xl px-6 py-2 bg-gradient-to-r from-white to-cashew-25 hover:shadow-md transition-all"
+                      >
+                        <AccordionTrigger className="text-left hover:text-cashew-700 py-4 hover:no-underline">
+                          <span className="font-medium text-cashew-800 pr-4">{faq.question}</span>
+                        </AccordionTrigger>
+                        <AccordionContent className="text-cashew-600 pb-4 pt-2 leading-relaxed">
+                          {faq.answer}
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Quick Guides Tab */}
+            <TabsContent value="guides" className="mt-0">
+              <Card className="shadow-lg border-cashew-200 bg-white/95 backdrop-blur-sm">
+                <CardHeader className="border-b border-cashew-100 bg-gradient-to-r from-cashew-50 to-white">
+                  <CardTitle className="text-xl text-cashew-800">Panduan Cepat</CardTitle>
+                  <p className="text-sm text-cashew-600 mt-1">
+                    Panduan singkat untuk fitur-fitur utama aplikasi
+                  </p>
+                </CardHeader>
+                <CardContent className="pt-6">
+                  <div className="grid gap-6 md:grid-cols-2">
+                    {quickGuides.map((guide, index) => (
+                      <div 
+                        key={index} 
+                        className={`bg-gradient-to-r ${guide.color} border border-cashew-200 rounded-xl p-6 hover:shadow-lg transition-all duration-300 cursor-pointer`}
+                        onClick={() => toast.success(`Membuka panduan ${guide.title}...`)}
+                      >
+                        <div className="flex items-start space-x-4">
+                          <div className={`${guide.iconBg} p-3 rounded-xl shadow-sm`}>
+                            <guide.icon className={`h-6 w-6 ${guide.iconColor}`} />
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-gray-800 mb-2">{guide.title}</h4>
+                            <p className="text-sm text-gray-600 mb-3">{guide.description}</p>
+                            <div className="flex items-center text-xs text-gray-500">
+                              <ExternalLink className="h-3 w-3 mr-1" />
+                              Buka Panduan
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Resources Tab */}
+            <TabsContent value="resources" className="mt-0">
+              <Card className="shadow-lg border-cashew-200 bg-white/95 backdrop-blur-sm">
+                <CardHeader className="border-b border-cashew-100 bg-gradient-to-r from-cashew-50 to-white">
+                  <CardTitle className="text-xl text-cashew-800 flex items-center">
+                    <Book className="h-5 w-5 mr-3 text-cashew-600" />
+                    Sumber Daya
+                  </CardTitle>
+                  <p className="text-sm text-cashew-600 mt-1">
+                    Unduh panduan, template, dan materi pembelajaran
+                  </p>
+                </CardHeader>
+                <CardContent className="pt-6">
+                  <div className="space-y-3">
+                    {resourceLinks.map((resource, index) => (
+                      <Button 
+                        key={index}
+                        onClick={() => toast.success(`Mengunduh ${resource.title}...`)}
+                        variant="outline" 
+                        className="w-full flex items-center justify-between p-4 h-auto border-cashew-200 hover:bg-cashew-50 hover:border-cashew-300 transition-all"
+                      >
+                        <div className="flex items-center">
+                          <resource.icon className="mr-3 h-5 w-5 text-cashew-600" />
+                          <span className="font-medium text-cashew-800">{resource.title}</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className="text-xs bg-cashew-100 text-cashew-700 px-2 py-1 rounded-full">
+                            {resource.type}
+                          </span>
+                          <Download className="h-4 w-4 text-cashew-400" />
+                        </div>
+                      </Button>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Contact Tab */}
+            <TabsContent value="contact" className="mt-0">
+              <div className="space-y-6">
+                {/* Direct Contact Card */}
+                <Card className="shadow-lg border-cashew-200 bg-white/95 backdrop-blur-sm">
+                  <CardHeader className="border-b border-cashew-100 bg-gradient-to-r from-cashew-50 to-white">
+                    <CardTitle className="text-xl text-cashew-800 flex items-center">
+                      <Phone className="h-5 w-5 mr-3 text-cashew-600" />
+                      Kontak Langsung
+                    </CardTitle>
+                    <p className="text-sm text-cashew-600 mt-1">
+                      Hubungi tim support kami untuk bantuan cepat
+                    </p>
+                  </CardHeader>
+                  <CardContent className="pt-6">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <Button 
+                        onClick={() => toast.success('Menghubungi: +62-800-1234-5678')}
+                        className="w-full bg-cashew-600 hover:bg-cashew-700 text-white py-3"
+                      >
+                        <Phone className="mr-2 h-4 w-4" />
+                        Telepon Support (24/7)
+                      </Button>
+                      
+                      <Button 
+                        onClick={() => toast.success('Membuka email: support@jambumete.com')}
+                        variant="outline"
+                        className="w-full border-cashew-300 hover:bg-cashew-50 py-3"
+                      >
+                        <Mail className="mr-2 h-4 w-4" />
+                        Email Support
+                      </Button>
+                    </div>
+
+                    <div className="text-center text-xs text-cashew-500 mt-4 p-3 bg-cashew-25 rounded-lg">
+                      <p>Tim support tersedia 24/7</p>
+                      <p>Waktu respon rata-rata: 1-4 jam</p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Contact Form Card */}
+                <Card className="shadow-lg border-cashew-200 bg-white/95 backdrop-blur-sm">
+                  <CardHeader className="border-b border-cashew-100 bg-gradient-to-r from-cashew-50 to-white">
+                    <CardTitle className="text-xl text-cashew-800 flex items-center">
+                      <Users className="h-5 w-5 mr-3 text-cashew-600" />
+                      Kirim Pesan Bantuan
+                    </CardTitle>
+                    <p className="text-sm text-cashew-600 mt-1">
+                      Kirimkan pesan detail dan tim support akan merespons segera
+                    </p>
+                  </CardHeader>
+                  <CardContent className="pt-6">
+                    <form onSubmit={handleSendSupport} className="space-y-6">
+                      <div className="grid gap-6 md:grid-cols-2">
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium text-cashew-700">
+                            Email Anda *
+                          </label>
+                          <Input 
+                            type="email"
+                            value={userEmail}
+                            onChange={(e) => setUserEmail(e.target.value)}
+                            placeholder="email@example.com"
+                            className="border-cashew-200 focus:border-cashew-400 focus:ring-cashew-400"
+                            required
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium text-cashew-700">
+                            Kategori
+                          </label>
+                          <select className="w-full px-3 py-2 border border-cashew-200 rounded-md focus:border-cashew-400 focus:outline-none focus:ring-1 focus:ring-cashew-400">
+                            <option>Masalah Teknis</option>
+                            <option>Bantuan Penggunaan</option>
+                            <option>Saran & Masukan</option>
+                            <option>Lainnya</option>
+                          </select>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium text-cashew-700">
+                          Pesan *
+                        </label>
+                        <Textarea 
+                          value={supportMessage}
+                          onChange={(e) => setSupportMessage(e.target.value)}
+                          placeholder="Deskripsikan masalah atau pertanyaan Anda dengan detail..."
+                          className="min-h-[120px] border-cashew-200 focus:border-cashew-400 focus:ring-cashew-400"
+                          required
+                        />
+                      </div>
+                      
+                      <div className="flex justify-end">
+                        <Button 
+                          type="submit"
+                          className="bg-cashew-600 hover:bg-cashew-700 px-8 py-3 font-medium shadow-lg"
+                        >
+                          <MessageCircle className="mr-2 h-4 w-4" />
+                          Kirim Pesan Bantuan
+                        </Button>
+                      </div>
+                    </form>
+                  </CardContent>
+                </Card>
               </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-cashew-700">
-                  Kategori
-                </label>
-                <select className="w-full px-3 py-2 border border-cashew-200 rounded-md focus:border-cashew-400 focus:outline-none focus:ring-1 focus:ring-cashew-400">
-                  <option>Masalah Teknis</option>
-                  <option>Bantuan Penggunaan</option>
-                  <option>Saran & Masukan</option>
-                  <option>Lainnya</option>
-                </select>
-              </div>
-            </div>
-            
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-cashew-700">
-                Pesan *
-              </label>
-              <Textarea 
-                value={supportMessage}
-                onChange={(e) => setSupportMessage(e.target.value)}
-                placeholder="Deskripsikan masalah atau pertanyaan Anda dengan detail..."
-                className="min-h-[120px] border-cashew-200 focus:border-cashew-400 focus:ring-cashew-400"
-                required
-              />
-            </div>
-            
-            <div className="flex justify-end">
-              <Button 
-                type="submit"
-                className="bg-cashew-600 hover:bg-cashew-700 px-8 py-3 font-medium shadow-lg"
-              >
-                <MessageCircle className="mr-2 h-4 w-4" />
-                Kirim Pesan Bantuan
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+            </TabsContent>
+          </div>
+        </Tabs>
+      </div>
     </div>
   );
 };
