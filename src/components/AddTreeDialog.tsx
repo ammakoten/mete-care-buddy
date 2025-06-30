@@ -75,7 +75,7 @@ const AddTreeDialog = () => {
                 id="name"
                 value={formData.name}
                 onChange={(e) => handleInputChange('name', e.target.value)}
-                placeholder="Contoh: Cashew Tree A1"
+                placeholder="Contoh: Pohon Jambu Mete A1"
               />
             </div>
             <div className="space-y-2">
@@ -99,10 +99,12 @@ const AddTreeDialog = () => {
                   <SelectValue placeholder="Pilih varietas" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Common Cashew">Common Cashew</SelectItem>
-                  <SelectItem value="Dwarf Cashew">Dwarf Cashew</SelectItem>
-                  <SelectItem value="Jumbo Cashew">Jumbo Cashew</SelectItem>
-                  <SelectItem value="Brazilian Cashew">Brazilian Cashew</SelectItem>
+                  <SelectItem value="Jambu Mete Biasa">Jambu Mete Biasa</SelectItem>
+                  <SelectItem value="Jambu Mete Kerdil">Jambu Mete Kerdil</SelectItem>
+                  <SelectItem value="Jambu Mete Jumbo">Jambu Mete Jumbo</SelectItem>
+                  <SelectItem value="Jambu Mete Gajah">Jambu Mete Gajah</SelectItem>
+                  <SelectItem value="Jambu Mete Merah">Jambu Mete Merah</SelectItem>
+                  <SelectItem value="Jambu Mete Brazil">Jambu Mete Brazil</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -123,12 +125,23 @@ const AddTreeDialog = () => {
 
           <div className="space-y-2">
             <Label htmlFor="location">Lokasi *</Label>
-            <Input
-              id="location"
-              value={formData.location}
-              onChange={(e) => handleInputChange('location', e.target.value)}
-              placeholder="Contoh: North Field - Section 1"
-            />
+            <Select value={formData.location} onValueChange={(value) => handleInputChange('location', value)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Pilih lokasi" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Kebun Utara - Bagian 1">Kebun Utara - Bagian 1</SelectItem>
+                <SelectItem value="Kebun Utara - Bagian 2">Kebun Utara - Bagian 2</SelectItem>
+                <SelectItem value="Kebun Selatan - Bagian 1">Kebun Selatan - Bagian 1</SelectItem>
+                <SelectItem value="Kebun Selatan - Bagian 2">Kebun Selatan - Bagian 2</SelectItem>
+                <SelectItem value="Kebun Timur - Bagian 1">Kebun Timur - Bagian 1</SelectItem>
+                <SelectItem value="Kebun Timur - Bagian 2">Kebun Timur - Bagian 2</SelectItem>
+                <SelectItem value="Kebun Barat - Bagian 1">Kebun Barat - Bagian 1</SelectItem>
+                <SelectItem value="Kebun Barat - Bagian 2">Kebun Barat - Bagian 2</SelectItem>
+                <SelectItem value="Kebun Tengah">Kebun Tengah</SelectItem>
+                <SelectItem value="Area Pembibitan">Area Pembibitan</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="space-y-2">
