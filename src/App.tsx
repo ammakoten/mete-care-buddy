@@ -17,6 +17,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import CombinedFile from "./pages/CombinedFile";
 import { AuthProvider } from "./contexts/AuthContext";
+import { TreeProvider } from "./contexts/TreeContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
@@ -24,34 +25,36 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            {/* Public routes */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/combined" element={<CombinedFile />} />
-            
-            {/* Protected routes */}
-            <Route element={<ProtectedRoute />}>
-              <Route path="/" element={<AppLayout />}>
-                <Route index element={<Dashboard />} />
-                <Route path="trees" element={<Trees />} />
-                <Route path="tasks" element={<Tasks />} />
-                <Route path="weather" element={<Weather />} />
-                <Route path="analytics" element={<Analytics />} />
-                <Route path="settings" element={<Settings />} />
+      <TreeProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              {/* Public routes */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/combined" element={<CombinedFile />} />
+              
+              {/* Protected routes */}
+              <Route element={<ProtectedRoute />}>
+                <Route path="/" element={<AppLayout />}>
+                  <Route index element={<Dashboard />} />
+                  <Route path="trees" element={<Trees />} />
+                  <Route path="tasks" element={<Tasks />} />
+                  <Route path="weather" element={<Weather />} />
+                  <Route path="analytics" element={<Analytics />} />
+                  <Route path="settings" element={<Settings />} />
+                </Route>
               </Route>
-            </Route>
-            
-            {/* Fallback routes */}
-            <Route path="/index" element={<Navigate to="/" replace />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
+              
+              {/* Fallback routes */}
+              <Route path="/index" element={<Navigate to="/" replace />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </TreeProvider>
     </AuthProvider>
   </QueryClientProvider>
 );

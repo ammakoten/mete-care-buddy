@@ -6,17 +6,15 @@ import { toast } from "sonner";
 import { Plus, Filter, Search as SearchIcon, TreeDeciduous, TrendingUp, AlertTriangle, CheckCircle, Grid3X3, List } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import TreeOverview from '@/components/TreeOverview';
+import AddTreeDialog from '@/components/AddTreeDialog';
 import { useNavigate } from 'react-router-dom';
+import { useTreeContext } from '@/contexts/TreeContext';
 
 const Trees = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const navigate = useNavigate();
-
-  const handleAddTree = () => {
-    navigate('/settings');
-    toast.success('Mengarahkan ke pengaturan untuk menambah pohon baru');
-  };
+  const { trees } = useTreeContext();
 
   const handleFilter = () => {
     navigate('/analytics');
@@ -29,6 +27,12 @@ const Trees = () => {
       toast.success(`Mencari pohon: ${searchQuery}`);
     }
   };
+
+  // Calculate stats from actual tree data
+  const healthyTrees = trees.filter(tree => tree.health === 'healthy').length;
+  const needsAttentionTrees = trees.filter(tree => tree.health === 'needs-attention').length;
+  const criticalTrees = trees.filter(tree => tree.health === 'critical').length;
+  const totalTrees = trees.length;
 
   const handleStatClick = (statType: string, count: number) => {
     switch(statType) {
@@ -85,7 +89,7 @@ const Trees = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <h1 className="text-xl font-semibold text-gray-800">Inventaris Pohon</h1>
-              <span className="text-sm text-gray-500">47 pohon terdaftar</span>
+              <span className="text-sm text-gray-500">{totalTrees} pohon terdaftar</span>
             </div>
             
             <div className="flex items-center space-x-3">
@@ -122,9 +126,7 @@ const Trees = () => {
                 <Filter className="mr-2 h-4 w-4" /> Filter
               </Button>
               
-              <Button onClick={handleAddTree} className="bg-cashew-600 hover:bg-cashew-700">
-                <Plus className="mr-2 h-4 w-4" /> Tambah Pohon
-              </Button>
+              <AddTreeDialog />
             </div>
           </div>
         </div>
@@ -135,14 +137,14 @@ const Trees = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <Card 
             className="bg-white border border-gray-200 hover:shadow-lg transition-shadow duration-200 cursor-pointer"
-            onClick={() => handleStatClick('healthy', 42)}
+            onClick={() => handleStatClick('healthy', healthyTrees)}
           >
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600 mb-1">Pohon Sehat</p>
-                  <p className="text-3xl font-bold text-green-600">42</p>
-                  <p className="text-xs text-green-500 mt-1">↗ +5 dari bulan lalu</p>
+                  <p className="text-3xl font-bold text-green-600">{healthyTrees}</p>
+                  <p className="text-xs text-green-500 mt-1">↗ Status baik</p>
                 </div>
                 <div className="p-3 bg-green-100 rounded-full">
                   <CheckCircle className="h-8 w-8 text-green-600" />
@@ -153,14 +155,14 @@ const Trees = () => {
 
           <Card 
             className="bg-white border border-gray-200 hover:shadow-lg transition-shadow duration-200 cursor-pointer"
-            onClick={() => handleStatClick('attention', 4)}
+            onClick={() => handleStatClick('attention', needsAttentionTrees)}
           >
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600 mb-1">Perlu Perhatian</p>
-                  <p className="text-3xl font-bold text-amber-600">4</p>
-                  <p className="text-xs text-amber-500 mt-1">→ Stabil</p>
+                  <p className="text-3xl font-bold text-amber-600">{needsAttentionTrees}</p>
+                  <p className="text-xs text-amber-500 mt-1">→ Perlu tindakan</p>
                 </div>
                 <div className="p-3 bg-amber-100 rounded-full">
                   <AlertTriangle className="h-8 w-8 text-amber-600" />
@@ -171,13 +173,13 @@ const Trees = () => {
 
           <Card 
             className="bg-white border border-gray-200 hover:shadow-lg transition-shadow duration-200 cursor-pointer"
-            onClick={() => handleStatClick('critical', 1)}
+            onClick={() => handleStatClick('critical', criticalTrees)}
           >
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600 mb-1">Status Kritis</p>
-                  <p className="text-3xl font-bold text-red-600">1</p>
+                  <p className="text-3xl font-bold text-red-600">{criticalTrees}</p>
                   <p className="text-xs text-red-500 mt-1">⚠ Butuh tindakan</p>
                 </div>
                 <div className="p-3 bg-red-100 rounded-full">
@@ -194,9 +196,9 @@ const Trees = () => {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 mb-1">Pertumbuhan</p>
-                  <p className="text-3xl font-bold text-blue-600">+8%</p>
-                  <p className="text-xs text-blue-500 mt-1">↗ Trend positif</p>
+                  <p className="text-sm font-medium text-gray-600 mb-1">Total Pohon</p>
+                  <p className="text-3xl font-bold text-blue-600">{totalTrees}</p>
+                  <p className="text-xs text-blue-500 mt-1">↗ Terus bertambah</p>
                 </div>
                 <div className="p-3 bg-blue-100 rounded-full">
                   <TrendingUp className="h-8 w-8 text-blue-600" />
@@ -270,12 +272,21 @@ const Trees = () => {
                 <TreeDeciduous className="mr-2 h-5 w-5 text-cashew-600" />
                 Daftar Pohon Jambu Mete
               </h2>
-              <span className="text-sm text-gray-500">Menampilkan 47 pohon</span>
+              <span className="text-sm text-gray-500">Menampilkan {totalTrees} pohon</span>
             </div>
           </div>
           
           <div className="p-6">
-            <TreeOverview viewMode={viewMode} />
+            {totalTrees === 0 ? (
+              <div className="text-center py-12">
+                <TreeDeciduous className="mx-auto h-16 w-16 text-gray-400 mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">Belum ada pohon</h3>
+                <p className="text-gray-500 mb-6">Mulai dengan menambahkan pohon jambu mete pertama Anda</p>
+                <AddTreeDialog />
+              </div>
+            ) : (
+              <TreeOverview viewMode={viewMode} />
+            )}
           </div>
         </div>
       </div>

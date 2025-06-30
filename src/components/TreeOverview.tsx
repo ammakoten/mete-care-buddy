@@ -2,13 +2,13 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { trees } from '@/data/mockData';
 import { TreeDeciduous, CalendarCheck, MapPin, Info, MoreVertical, Edit, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from "@/hooks/use-toast";
 import { toast } from "sonner";
 import { useNavigate } from 'react-router-dom';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { useTreeContext } from '@/contexts/TreeContext';
 
 interface TreeOverviewProps {
   viewMode?: 'grid' | 'list';
@@ -17,6 +17,7 @@ interface TreeOverviewProps {
 const TreeOverview = ({ viewMode = 'grid' }: TreeOverviewProps) => {
   const { toast: toastUI } = useToast();
   const navigate = useNavigate();
+  const { trees, deleteTree } = useTreeContext();
 
   const handleViewDetails = (treeId: string) => {
     navigate('/analytics');
@@ -29,9 +30,8 @@ const TreeOverview = ({ viewMode = 'grid' }: TreeOverviewProps) => {
   };
 
   const handleDeleteTree = (treeId: string, treeName: string) => {
-    toast.error(`Menghapus pohon: ${treeName}`, {
-      description: "Fitur hapus akan segera tersedia",
-    });
+    deleteTree(treeId);
+    toast.success(`Pohon ${treeName} berhasil dihapus`);
   };
 
   const handleLocationClick = (location: string) => {
